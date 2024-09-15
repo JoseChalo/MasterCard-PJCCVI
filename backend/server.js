@@ -4,23 +4,20 @@ const cors = require('cors');
 const app = express();
 const port = 3001;
 
-// Middleware para manejar JSON
 app.use(express.json());
 app.use(cors());
 
-// Configuración de la conexión a SQL Server
 const dbConfig = {
   user: 'pjCCVI',
   password: 'pjccvi',
-  server: 'localhost', // o la IP de tu servidor SQL
+  server: 'localhost',
   database: 'pjCCVI',
   options: {
-    encrypt: false, // Si usas Azure, puede ser necesario
-    trustServerCertificate: true // Cambia esto si usas certificados SSL
+    encrypt: false,
+    trustServerCertificate: true // certificados SSL
   }
 };
 
-// Conectar a SQL Server
 sql.connect(dbConfig, err => {
   if (err) {
     console.error('Error al conectar a la base de datos:', err);
