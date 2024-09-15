@@ -22,4 +22,4 @@ nodos en frontend
 nodos en backend
     mssql
     express
-    
+    cors
