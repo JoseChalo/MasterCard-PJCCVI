@@ -1,0 +1,132 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #111;
+}
+
+.login-logo {
+  text-align: center;
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 2px;
+}
+
+.inicio{
+  color: white;
+  font-family: 'Helvetica Neue', sans-serif;
+  margin-bottom: 15px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #222;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.login-form h2 {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+}
+
+.inline-form-group1 {
+  display: flex;
+}
+
+.inline-form-group1 input::placeholder {
+  color: gray; 
+  opacity: 1;
+}
+
+.inline-form-group1 label {
+  margin-right: 40px;
+  margin-top: 5px;
+}
+
+.inline-form-group2 {
+  display: flex;
+}
+
+.inline-form-group2 input::placeholder {
+  color: gray;
+  opacity: 1;
+}
+
+.inline-form-group2 label {
+  margin-right: 10px;
+  margin-top: 6px;
+}
+
+.login-form .form-label {
+  font-weight: bold;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #E0E0E0;
+}
+
+.login-form .form-control {
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.login-form .form-control:focus {
+  box-shadow: none;
+  outline: none;
+  border: 2px solid #FF5F00 !important;
+}
+
+
+
+
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.buttonColor {
+  background-color: #FF5900 !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+  width: 50%;
+  height: 50%;
+  border-radius: 4px;
+  padding: 10px 0;
+  margin-left: 15px;
+}
+
+.login-btn:hover {
+  background-color: #F69F14!important;
+}
+
+
+
+
+.login-links {
+  width: 100%;
+  display: flex;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 0.9rem;
+}
+
+.login-links a {
+  color: #FF5900 !important;
+  text-decoration: none;
+}
+
+.login-links a:hover {
+  color: #F69F14!important;
+  text-decoration: underline;
+}

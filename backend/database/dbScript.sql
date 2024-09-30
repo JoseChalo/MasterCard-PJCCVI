@@ -12,6 +12,7 @@ create table tarjetas (
 	Primary key (numero)
 );
 
+
 create table transacciones (
 	id int primary key IDENTITY(1,1),
 	monto numeric(14, 2),

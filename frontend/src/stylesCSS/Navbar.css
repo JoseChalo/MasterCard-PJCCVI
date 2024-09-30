@@ -1,0 +1,87 @@
+/* Estilos globales */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Public Sans', 'Noto Sans', sans-serif;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    background-color: #1a0d0e; /* Color oscuro del navbar */
+    border-bottom: 1px solid #39282c; /* Línea separadora */
+  }
+  
+  .navbar-brand a {
+    color: white;
+    font-size: 2.25rem; /* Tamaño de texto del logo */
+    font-weight: 700;
+    text-decoration: none;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 24px; /* Espacio entre los enlaces */
+  }
+  
+  .navbar-links li {
+    list-style: none;
+  }
+  
+  .navbar-links a {
+    color: white;
+    font-size: 1.225rem; /* Tamaño de texto de los links */
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  .navbar-logout {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .navbar-logout button {
+    background-color: #39282c; /* Botón oscuro */
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .navbar-logout button:hover {
+    background-color: #db143c; /* Cambio de color al hacer hover */
+  }
+  
+  .navbar-search {
+    display: none; /* Ocultar el campo de búsqueda para reflejar la imagen proporcionada */
+  }
+  
+  .navbar a:hover {
+    color: #db143c; /* Color rojo en hover */
+  }
+  
+  /* Estilo de la imagen de perfil */
+  .navbar-profile {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .navbar-icons {
+    display: flex;
+    gap: 16px; /* Espacio entre los iconos */
+  }
+  
+  .navbar-icons img {
+    width: 24px; /* Tamaño de los iconos */
+    cursor: pointer;
+  }

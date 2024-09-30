@@ -1,7 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import React, { useEffect, useState } from 'react';
+//import axios from 'axios';
+import React from 'react';
+import AppRoutes from './routes';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
+  return (
+    <div className="App">
+      <AppRoutes />
+    </div>
+  );
+}
+
+export default App;
+
+/*function App() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState('');
 
@@ -23,8 +36,8 @@ function App() {
       })
       .catch(error => console.error('Error al agregar el ítem:', error));
     */
-  };
-
+ // };
+/*
   return (
     <div>
       <h1>Lista de Ítems</h1>
@@ -44,3 +57,4 @@ function App() {
 }
 
 export default App;
+*/

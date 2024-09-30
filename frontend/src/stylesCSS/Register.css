@@ -1,0 +1,75 @@
+.register-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+  background-color: #1E1E1E;
+  height: 100vh;
+}
+
+.form-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-card {
+  background-color: #2B2B2B;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  width: 100%;
+  max-width: 400px;
+}
+
+.card-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-front, .card-back {
+  background-image: url('../images/Card.png');
+  background-color: #1E1E1E !important;
+  border: none !important;
+  background-size: cover !important; 
+  color: white !important;
+  width: 350px; 
+  height: 200px !important;
+  margin-left: 50px;
+  display: flex;
+}
+
+
+.card-title {
+  color: #FF5F00;
+}
+
+.card-details {
+  font-size: 1.1em;
+  line-height: 1.5em;
+  z-index: 1; 
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.buttonColor {
+  background-color: #FF5900 !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+  width: 100%;
+  height: 50%;
+  border-radius: 4px;
+  padding: 10px 0;
+  margin-left: 3px;
+}
+
+.login-btn:hover {
+  background-color: #F69F14 !important;
+}
