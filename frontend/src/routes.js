@@ -1,6 +1,5 @@
-// src/routes.js
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home'; // Asegúrate de que esta ruta sea correcta
+import Home from './pages/Home';
 import Register from './components/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import Login from './components/Login';
@@ -14,8 +13,8 @@ const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} /> {/* Ruta para Login */}
-        <Route path="/home" element={<Home />} /> {/* Ruta para Home */}
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/pagar" element={<Pagar />} />
         <Route path="/compras" element={<VerCompras />} />
         <Route path="/fechas" element={<FechasDeCorteYPago />} />

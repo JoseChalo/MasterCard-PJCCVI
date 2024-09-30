@@ -4,15 +4,20 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import '../stylesCSS/Register.css';
 
+// Definir el componente Register
 function Register() {
+  // Declaración de los estados necesarios para el formulario
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [generatedCard, setGeneratedCard] = useState(null);
 
+  // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Generación de número de tarjeta aleatorio y otros datos de la tarjeta
     const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
     const targetType = "Mastercard";
     const expirationDate = `${Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0')}/${Math.floor(Math.random() * 5 + 25)}`;
@@ -20,6 +25,7 @@ function Register() {
     const authorizedAmount = 5000;
     const availableAmount = 5000;
 
+    // Establecer la tarjeta generada en el estado
     setGeneratedCard({
       cardNumber,
       name,
@@ -31,59 +37,66 @@ function Register() {
     });
   };
 
+  // Función para validar el formulario
   const isFormValid = () => {
     return name && email && password && termsAccepted;
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container"> {/* Contenedor principal del formulario de registro */}
       <div className="form-side">
-        <Form onSubmit={handleSubmit} className="form-card">
+        <Form onSubmit={handleSubmit} className="form-card"> {/* Formulario para registrar una nueva cuenta */}
+
+          {/* Grupo para el campo de nombre */}
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Nombre</Form.Label>
             <Form.Control
               type="text"
               placeholder="Ingresa tu nombre"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)} // Actualiza el estado con el valor ingresado
             />
           </Form.Group>
 
+          {/* Grupo para el campo de correo electrónico */}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Correo Gmail</Form.Label>
             <Form.Control
               type="email"
               placeholder="Ingresa tu correo"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)} // Actualiza el estado con el valor ingresado
             />
           </Form.Group>
 
+          {/* Grupo para el campo de contraseña */}
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Contraseña</Form.Label>
             <Form.Control
               type="password"
               placeholder="Crea una contraseña"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)} // Actualiza el estado con el valor ingresado
             />
           </Form.Group>
 
+          {/* Grupo para aceptar los términos y condiciones */}
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check 
               type="checkbox" 
               label="Acepto los términos y condiciones" 
               checked={termsAccepted}
-              onChange={(e) => setTermsAccepted(e.target.checked)}
+              onChange={(e) => setTermsAccepted(e.target.checked)} // Actualiza el estado con el valor ingresado
             />
           </Form.Group>
 
+          {/* Grupo para los botones de acción */}
           <Form.Group className="mb-3 d-flex justify-content-between">
             <Button 
               variant="primary" 
               type="submit" 
               className="buttonColor" 
-              disabled={!isFormValid()}
+              disabled={!isFormValid()} // Desactiva el botón si el formulario no es válido
             >
               Crear cuenta
             </Button>
@@ -91,7 +104,7 @@ function Register() {
             <Button
               variant="secondary"
               className="buttonColor"
-              onClick={() => window.history.back()}
+              onClick={() => window.history.back()} // Regresa a la página anterior
             >
               Regresar
             </Button>
@@ -100,15 +113,16 @@ function Register() {
         </Form>
       </div>
 
-      {generatedCard && (
+      {/* Si se generó una tarjeta, mostrar los detalles*/}
+      {generatedCard && ( 
         <div className="card-side">
           <Card className="card-front">
             <Card.Body>
               <div className="card-details">
-              <p>{}</p>
-                <p>{generatedCard.cardNumber}</p>
-                <p>{generatedCard.expirationDate}</p>
-                <p>{generatedCard.name}</p>
+              <p>{}</p> {/* Espacio para que no aparezca texto hasta arriba de la imagen de la tarjeta xd */}
+                <p>{generatedCard.cardNumber}</p> {/* Muestra el número de tarjeta */}
+                <p>{generatedCard.expirationDate}</p> {/* Muestra la fecha de expiración */}
+                <p>{generatedCard.name}</p> {/* Muestra el nombre del titular */}
               </div>
             </Card.Body>
           </Card>
@@ -116,10 +130,10 @@ function Register() {
           <Card className="card-back mt-3">
             <Card.Body>
               <div className="card-details">
-                <p>{}</p>
-                <p>Código de Seguridad: {generatedCard.securityCode}</p>
-                <p>Monto Autorizado: {generatedCard.authorizedAmount}</p>
-                <p>Monto Disponible: {generatedCard.availableAmount}</p>
+                <p>{}</p> {/* Espacio para que no aparezca hasta arriba de la imagen de la tarjeta xd */}
+                <p>Código de Seguridad: {generatedCard.securityCode}</p> {/* Muestra el código de seguridad */}
+                <p>Monto Autorizado: {generatedCard.authorizedAmount}</p> {/* Muestra el monto autorizado */}
+                <p>Monto Disponible: {generatedCard.availableAmount}</p> {/* Muestra el monto disponible */}
               </div>
             </Card.Body>
           </Card>
