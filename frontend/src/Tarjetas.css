@@ -1,0 +1,102 @@
+.tarjetas-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .main-card {
+    background-color: #2b1617;
+    color: white;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .main-card h1 {
+    font-size: 3rem;
+  }
+  
+  .main-card p {
+    margin-top: 10px;
+    font-size: 1.1rem;
+  }
+  
+  .main-card .btn {
+    margin-top: 20px;
+    background-color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  .tarjetas-lista {
+    margin-bottom: 20px;
+  }
+  
+  .tarjetas-lista h2 {
+    margin-bottom: 15px;
+  }
+  
+  .tarjeta-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .tarjeta-logo {
+    width: 50px;
+    margin-right: 10px;
+  }
+  
+  .tarjeta-item p {
+    margin: 0;
+  }
+  
+  .add-tarjeta .btn {
+    background-color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  
+  .title {
+    text-align: left; /* Alinear el título a la izquierda */
+    margin-left: 20px; /* Espaciado desde la izquierda */
+    margin-bottom: 10px; /* Espacio entre el título y el acordeón */
+  }
+  
+  .tarjetas-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .gif-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Espacio entre el GIF y el contenido */
+  }
+  
+  .gif-image {
+    width: 70%; /* Ajusta el ancho según sea necesario */
+    max-width: 600px; /* Ancho máximo para el GIF */
+    height: auto; /* Mantiene la relación de aspecto */
+  }
+  
+  .title {
+    text-align: left; /* Alinear el título a la izquierda */
+    margin-left: 20px; /* Espaciado desde la izquierda */
+    margin-bottom: 10px; /* Espacio entre el título y el acordeón */
+  }
+/* Cambiar el estilo del botón del acordeón */
+.accordion-button {
+  background-color: #333; /* Cambia esto por el color deseado */
+  color: white; /* Cambia el color del texto si es necesario */
+  border: none; /* Opcional, si quieres quitar el borde */
+}
+
+.accordion-button:hover {
+  background-color: #f04d56; /* Cambia esto por el color del hover */
+}
