@@ -37,14 +37,14 @@ export const createUser = async (req, res) => {
             .query('INSERT INTO tarjetas (numero, titular, tipo, fecha_venc, num_seguridad, monto_autorizado, monto_disponible) VALUES (@numero, @titular, @tipo, @fecha_venc, @num_seguridad, @monto_autorizado, @monto_disponible)');
 
         const resultCardsUser = await pool.request()
-            .input("numeroTarjeta", sql.Char, resultTarjeta.recordset[0].numeroTarjeta)
-            .input("idUser", sql.VarChar, resultUser.recordset[0].id)
+            .input("numeroTarjeta", sql.Char, req.body.numero)
+            .input("idUser", sql.VarChar, req.body.gmail)
             .query('INSERT INTO cardsUser (numeroTarjeta, idUser) VALUES (@numeroTarjeta, @idUser)');
 
         res.json({
-            userId: resultUser.recordset[0],
-            tarjetaId: resultTarjeta.recordset[0],
-            resultCardsUser: resultCardsUser.recordset[0]
+            userId: req.body.gmail,
+            tarjetaId: req.body.numero,
+            resultCardsUser: resultCardsUser 
         });
     } catch (error) {
         console.error('Error al crear usuario y tarjeta:', error);

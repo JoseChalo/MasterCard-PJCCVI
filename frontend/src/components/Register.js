@@ -21,7 +21,7 @@ function Register() {
     const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
     const targetType = "credito";
     const expirationDate = `${Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0')}/${Math.floor(Math.random() * 5 + 25)}`;
-    const securityCode = Math.floor(Math.random() * 900 + 100);
+    const securityCode = Math.floor(Math.random() * 900 + 100).toString();
     const authorizedAmount = 5000;
     const availableAmount = 5000;
 
