@@ -22,5 +22,4 @@ router.post("/transacciones", createTransacciones);
 
 router.get("/autorizacion", autorizacionTarjeta);
 
-
 export default router;

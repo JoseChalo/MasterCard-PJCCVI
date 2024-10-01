@@ -129,7 +129,6 @@ export const getTransacciones = async (req, res) => {
 export const autorizacionTarjeta = async (req, res) => {
     try {
         const { tarjeta, nombre, fecha_venc, num_seguridad, monto, tienda, formato } = req.query;
-        var validar = true;
         const pool = await getConnection();
         const result = await pool.request()
             .input("numero", sql.Char, tarjeta)
@@ -137,19 +136,48 @@ export const autorizacionTarjeta = async (req, res) => {
 
         const tarjetaInfo = result.recordset[0];
 
-        if(nombre == tarjetaInfo.titular && fecha_venc == tarjetaInfo.fecha_venc && num_seguridad == tarjetaInfo.num_seguridad && (monto <= tarjetaInfo.monto_disponible)){
-            if(formato == 1){
+        if (!tarjetaInfo) {
+            return res.status(404).send("Tarjeta no encontrada.");
+        }
 
-            } else if(formato == 0) {
-                
-            }
-        } else {
-            validar = false;
-        }         
-        res.json(result.recordset); 
+       /* if (nombre !== tarjetaInfo.titular) {
+            return res.status(400).send("Error: El nombre del titular es incorrecto.");
+        }*/
+        /*if (fecha_venc !== tarjetaInfo.fecha_venc) {
+            return res.status(400).send("Error: La fecha de vencimiento es incorrecta.");
+        }*/
+        if (num_seguridad !== tarjetaInfo.num_seguridad) {
+            return res.status(400).send("Error: El número de seguridad es incorrecto.");
+        }
+        if (monto > tarjetaInfo.monto_disponible) {
+            return res.status(400).send("Error: El monto excede el monto disponible.");
+        }
+
+        if (formato == 'json') {
+            return res.json({
+                "autorización": {
+                    "emisor": "MasterCard",
+                    "tarjeta": tarjetaInfo.tipo,
+                    "status": 1,
+                    "numero": tarjetaInfo.numero
+                }
+            });
+        } else if (formato == 'xml') {
+            const xmlResponse = `
+                <autorizacion>
+                    <emisor>MasterCard</emisor>
+                    <tarjeta>${tarjetaInfo.tipo}</tarjeta>
+                    <status>1</status>
+                    <numero>${tarjetaInfo.numero}</numero>
+                </autorizacion>
+            `;
+            res.set('Content-Type', 'application/xml');
+            return res.send(xmlResponse);
+        }
     } catch (error) {
         await pool.request().rollbackTransaction();
-        console.error('Datos de tarjeta incorrectos:', error);
-        res.status(500).send("Datos de tarjeta incorrectos.");
+        console.error('Error en la autorización de tarjeta:', error);
+        return res.status(500).send("Datos de tarjeta incorrectos.");
     }
 };
+
