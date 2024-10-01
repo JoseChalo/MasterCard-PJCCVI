@@ -5,7 +5,7 @@ body, html {
 }
 
 .fechas-container {
-  background-color: #2b2a3b;
+  background-color: #2b1617;
   padding: 40px;
   border-radius: 10px;
   width: 80%;
@@ -18,9 +18,9 @@ body, html {
   transform: translate(-50%, -50%);
 }
 
-.fechas-container h2 {
-  color: #ff7d50;
-  margin-bottom: 15px;
+.fechas-container h1 {
+  color: #fff;
+  margin-bottom: 25px;
 }
 
 .fechas-container p {
@@ -29,5 +29,6 @@ body, html {
 }
 
 .fechas-container p strong {
-  color: #ff7d50;
+  color: #db5d3d;
+  font-size: 18px;
 }

@@ -6,13 +6,13 @@ const Pagar = () => {
 
   const manejarPago = (e) => {
     e.preventDefault();
-    alert(`Se ha realizado un pago de $${monto}`);
+    alert(`Se ha realizado un pago de Q${monto}`);
     setMonto('');
   };
 
   return (
     <div className="pagar-container">
-      <h2>Realizar Pago</h2>
+      <h1>Realizar Pago</h1>
       <form onSubmit={manejarPago}>
         <label>
           Monto a pagar:

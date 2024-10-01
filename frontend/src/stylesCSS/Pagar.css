@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&display=swap');
 
 .pagar-container {
-  background-color: #2b2a3b;
+  background-color: #2b1617;
   padding: 40px;
   border-radius: 10px;
   width: 80%;
@@ -14,21 +14,38 @@
   transform: translate(-50%, -50%);
 }
 
-.pagar-container h2 {
-  color: #ff7d50;
-  margin-bottom: 15px;
+.pagar-container h1 {
+  color: #ffffff;
+  margin-bottom: 35px;
 }
 
 .pagar-container label {
   color: #fff;
+  font-weight: 300;
+  margin-top: 20px;
+  margin-right: 20px;
+  display: block; 
+}
+
+.pagar-container input {
+  margin-bottom: 20px; /* Espacio entre el input y el siguiente elemento */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 400px;
 }
 
 .pagar-container button {
+  display: block;  /* Para que el botón se centre */
+  margin: 20px auto 0 auto; /* Espacio superior e inferior y centrado horizontal */
   margin-top: 20px;
-  background-color: #ff7d50;
+  background-color: #db143c;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  
 }
+

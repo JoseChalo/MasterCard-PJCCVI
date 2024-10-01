@@ -1,63 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './Navbar';
-import Pagar from './Pagar';
-import VerCompras from './VerCompras';
-import FechasDeCorteYPago from './FechasDeCorteYPago';
-import Promociones from './Promociones';
-import ControlledCarousel from './Carousel'; // Usa el nuevo carrusel
-import axios from 'axios';
-import Tarjetas from './Tarjetas';
-import './App.css';
-
-// Define el componente Home para la página principal
-const Home = () => {
-  return (
-    <div className="home-container">
-      <h1>Bienvenido a la Página Principal</h1>
-      <ControlledCarousel /> {/* Muestra el nuevo carrusel */}
-    </div>
-  );
-};
+import React from 'react';
+import AppRoutes from './routes';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
-  const [items, setItems] = useState([]);  // Estado para los ítems
-  const [newItem, setNewItem] = useState('');  // Estado para el nuevo ítem
-
-  // Obtener los ítems desde el backend al cargar la página
-  useEffect(() => {
-    axios.get('http://localhost:3001/items')
-      .then(response => setItems(response.data))
-      .catch(error => console.error('Error al obtener los datos:', error));
-  }, []);
-
-  // Función para agregar un nuevo ítem
-  const addItem = () => {
-    axios.post('http://localhost:3001/items', { name: newItem })
-      .then(() => {
-        setItems([...items, { name: newItem }]); // Agregar el nuevo ítem al estado
-        setNewItem(''); // Limpiar el campo de entrada
-      })
-      .catch(error => console.error('Error al agregar el ítem:', error));
-  };
-
   return (
-    <Router>
-      <div className="INFO">
-        <Navbar /> {/* Navbar para navegar entre las rutas */}
-        
-        {/* Definir las rutas */}
-        <Routes>
-          <Route path="/" element={<Home />} /> {/* Página principal con carrusel */}
-          <Route path="/pagar" element={<Pagar />} />
-          <Route path="/compras" element={<VerCompras items={items} />} /> {/* Pasamos los ítems a VerCompras */}
-          <Route path="/fechas" element={<FechasDeCorteYPago />} />
-          <Route path="/promociones" element={<Promociones />} />
-          <Route path="/tarjetas" element={<Tarjetas />} /> {/* Nueva ruta para Tarjetas */}
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+      <AppRoutes />
+    </div>
   );
 }
 
 export default App;
+
+/*function App() {
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItem] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/tarjetas')
+      .then(response => setItems(response.data))
+      .catch(error => console.error('Error al obtener los datos:', error));
+  }, []);
+
+  const addItem = () => {
+    /*
+        Tomen como ejemplo pero no es correcto ya que no esta echo 
+        para las tablas de nuestra base de datos
+
+    axios.post('http://localhost:3001/items', { name: newItem })
+      .then(() => {
+        setItems([...items, { name: newItem }]);
+        setNewItem('');
+      })
+      .catch(error => console.error('Error al agregar el ítem:', error));
+    */
+ // };
+/*
+  return (
+    <div>
+      <h1>Lista de Ítems</h1>
+      <ul>
+        {items.map(item => (
+          <li key={item.numero}>Titular:  {item.titular}, Tipo: {item.tipo}, fecha Vencimineto: {item.fecha_venc}</li>
+        ))}
+      </ul>
+      <input
+        type="text"
+        value={newItem}
+        onChange={(e) => setNewItem(e.target.value)}
+      />
+      <button onClick={addItem}>Agregar Ítem</button>
+    </div>
+  );
+}
+
+export default App;
+*/

@@ -7,6 +7,11 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-brand">
         <Link to="/">Mastercard</Link>
+        <img
+            src="https://images.wsj.net/im-45496?width=860&size=1.5&pixel_ratio=2"
+            alt="Mastercard Logo"
+            className="navbar-logo"
+          />
       </div>
       <ul className="navbar-links">
         <li><Link to="/pagar">Pagar</Link></li>

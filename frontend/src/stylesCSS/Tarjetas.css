@@ -5,7 +5,7 @@
   }
   
   .main-card {
-    background-color: #333;
+    background-color: #2b1617;
     color: white;
     padding: 40px;
     border-radius: 10px;
@@ -24,7 +24,7 @@
   
   .main-card .btn {
     margin-top: 20px;
-    background-color: #f04d56;
+    background-color: #333;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -92,7 +92,7 @@
   }
 /* Cambiar el estilo del botón del acordeón */
 .accordion-button {
-  background-color: #333333; /* Cambia esto por el color deseado */
+  background-color: #333; /* Cambia esto por el color deseado */
   color: white; /* Cambia el color del texto si es necesario */
   border: none; /* Opcional, si quieres quitar el borde */
 }

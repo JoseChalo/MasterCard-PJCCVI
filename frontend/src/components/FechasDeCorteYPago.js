@@ -7,7 +7,7 @@ const FechasDeCorteYPago = () => {
 
   return (
     <div className="fechas-container"> {/* Cambiar el nombre de la clase aquí */}
-      <h2>Sus Fechas de Corte y Pago Son:</h2>
+      <h1>Sus Fechas de Corte y Pago Son:</h1>
       <p><strong>Fecha de corte:</strong> {fechaCorte}</p>
       <p><strong>Fecha de pago:</strong> {fechaPago}</p>
     </div>
