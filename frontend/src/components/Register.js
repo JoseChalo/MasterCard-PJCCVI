@@ -12,6 +12,7 @@ function Register() {
   const [password, setPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [generatedCard, setGeneratedCard] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
@@ -35,6 +36,9 @@ function Register() {
       authorizedAmount,
       availableAmount,
     });
+
+    // Desactivar el botón y los campos de entrada
+    setIsButtonDisabled(true);
 
     // Crear el objeto que se va a enviar como JSON
     const userData = {
@@ -79,7 +83,7 @@ function Register() {
 
   // Función para validar el formulario
   const isFormValid = () => {
-    return name && email && password && termsAccepted;
+    return name && email && password && termsAccepted && !isButtonDisabled;
   };
 
   return (
@@ -95,6 +99,7 @@ function Register() {
               placeholder="Ingresa tu nombre"
               value={name}
               onChange={(e) => setName(e.target.value)} // Actualiza el estado con el valor ingresado
+              disabled={isButtonDisabled}
             />
           </Form.Group>
 
@@ -106,6 +111,7 @@ function Register() {
               placeholder="Ingresa tu correo"
               value={email}
               onChange={(e) => setEmail(e.target.value)} // Actualiza el estado con el valor ingresado
+              disabled={isButtonDisabled}
             />
           </Form.Group>
 
@@ -117,6 +123,7 @@ function Register() {
               placeholder="Crea una contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)} // Actualiza el estado con el valor ingresado
+              disabled={isButtonDisabled}
             />
           </Form.Group>
 
@@ -127,6 +134,7 @@ function Register() {
               label="Acepto los términos y condiciones" 
               checked={termsAccepted}
               onChange={(e) => setTermsAccepted(e.target.checked)} // Actualiza el estado con el valor ingresado
+              disabled={isButtonDisabled}
             />
           </Form.Group>
 
