@@ -54,3 +54,7 @@ VALUES
 
 Select * from tarjetas;
 SELECT * from users;
+
+SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN 
+	(SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A 
+	ON T.id = A.idTrans where A.numero = 1234567812345678; 
