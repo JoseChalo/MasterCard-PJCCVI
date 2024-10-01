@@ -52,5 +52,5 @@ VALUES
 ('4567890145678901', 'CarlosMendoza', 'debito', '2024-08-20', '012', 2000.00, 1500.00),
 ('5678901256789012', 'LauraPerez', 'credito', '2025-07-25', '345', 6000.00, 4500.00);
 
-Select * from tarjetas where numero = '1234567812345678';
+Select * from tarjetas;
 SELECT * from users;
