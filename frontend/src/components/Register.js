@@ -14,12 +14,42 @@ function Register() {
   const [generatedCard, setGeneratedCard] = useState(null);
 
   // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Crear el objeto que se va a enviar como JSON
+    const userData = {
+      gmail: email,
+      contra: password,
+      nombre: name
+    };
+
+    try {
+      // Realizar la petición POST al backend
+      const response = await fetch('http://localhost:3001/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData), // Convertir el objeto a JSON
+      });
+
+      if (response.ok) {
+        // Si la respuesta es exitosa, puedes manejar la respuesta aquí
+        const result = await response.json();
+        console.log('Usuario creado:', result);
+      } else {
+        // Manejar errores del servidor
+        console.error('Error al crear usuario:', response.status);
+      }
+    } catch (error) {
+      // Manejar errores de red o del fetch
+      console.error('Error en la conexión:', error);
+    }
 
     // Generación de número de tarjeta aleatorio y otros datos de la tarjeta
     const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
-    const targetType = "Mastercard";
+    const targetType = "credito";
     const expirationDate = `${Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0')}/${Math.floor(Math.random() * 5 + 25)}`;
     const securityCode = Math.floor(Math.random() * 900 + 100);
     const authorizedAmount = 5000;
@@ -119,7 +149,7 @@ function Register() {
           <Card className="card-front">
             <Card.Body>
               <div className="card-details">
-              <p>{}</p> {/* Espacio para que no aparezca texto hasta arriba de la imagen de la tarjeta xd */}
+                <p>{}</p> {/* Espacio para que no aparezca texto hasta arriba de la imagen de la tarjeta xd */}
                 <p>{generatedCard.cardNumber}</p> {/* Muestra el número de tarjeta */}
                 <p>{generatedCard.expirationDate}</p> {/* Muestra la fecha de expiración */}
                 <p>{generatedCard.name}</p> {/* Muestra el nombre del titular */}

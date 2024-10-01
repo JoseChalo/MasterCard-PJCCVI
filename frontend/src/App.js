@@ -17,7 +17,7 @@ export default App;
   const [newItem, setNewItem] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/items')
+    axios.get('http://localhost:3001/tarjetas')
       .then(response => setItems(response.data))
       .catch(error => console.error('Error al obtener los datos:', error));
   }, []);
