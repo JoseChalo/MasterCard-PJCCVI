@@ -16,12 +16,38 @@ function Register() {
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Generación de número de tarjeta aleatorio y otros datos de la tarjeta
+    const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
+    const targetType = "credito";
+    const expirationDate = `${Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0')}/${Math.floor(Math.random() * 5 + 25)}`;
+    const securityCode = Math.floor(Math.random() * 900 + 100);
+    const authorizedAmount = 5000;
+    const availableAmount = 5000;
+
+    // Establecer la tarjeta generada en el estado
+    setGeneratedCard({
+      cardNumber,
+      name,
+      targetType,
+      expirationDate,
+      securityCode,
+      authorizedAmount,
+      availableAmount,
+    });
 
     // Crear el objeto que se va a enviar como JSON
     const userData = {
       gmail: email,
       contra: password,
-      nombre: name
+      nombre: name,
+      numero: cardNumber,
+      titular: name,
+      tipo: targetType,
+      fecha_venc: expirationDate,
+      num_seguridad: securityCode,
+      monto_autorizado: authorizedAmount,
+      monto_disponible: availableAmount
     };
 
     try {
@@ -47,24 +73,8 @@ function Register() {
       console.error('Error en la conexión:', error);
     }
 
-    // Generación de número de tarjeta aleatorio y otros datos de la tarjeta
-    const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
-    const targetType = "credito";
-    const expirationDate = `${Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0')}/${Math.floor(Math.random() * 5 + 25)}`;
-    const securityCode = Math.floor(Math.random() * 900 + 100);
-    const authorizedAmount = 5000;
-    const availableAmount = 5000;
-
-    // Establecer la tarjeta generada en el estado
-    setGeneratedCard({
-      cardNumber,
-      name,
-      targetType,
-      expirationDate,
-      securityCode,
-      authorizedAmount,
-      availableAmount,
-    });
+    
+    
   };
 
   // Función para validar el formulario

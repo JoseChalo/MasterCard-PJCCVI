@@ -18,8 +18,8 @@ export const getTarjetas = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
+    const pool = await getConnection();
     try {
-        const pool = await getConnection();
         const resultUser = await pool.request()
             .input("gmail", sql.VarChar, req.body.gmail)
             .input("contra", sql.VarChar, req.body.contra)
@@ -47,7 +47,6 @@ export const createUser = async (req, res) => {
             resultCardsUser: resultCardsUser.recordset[0]
         });
     } catch (error) {
-        await pool.request().rollbackTransaction();
         console.error('Error al crear usuario y tarjeta:', error);
         res.status(500).send("Error al crear usuario y tarjeta.");
     }

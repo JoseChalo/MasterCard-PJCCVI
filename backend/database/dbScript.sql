@@ -1,4 +1,4 @@
-create database pjCCVI
+	create database pjCCVI
 use pjCCVI
 
 create table tarjetas (
