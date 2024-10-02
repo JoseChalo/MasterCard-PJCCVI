@@ -7,8 +7,8 @@ export const getTarjetas = async (req, res) => {
     try {
         const pool = await getConnection();
         const result = await pool.request()
-            .input("numero", sql.Char, req.params.numero)
-            .query('SELECT * FROM tarjetas WHERE numero = @numero');
+            .input("numeroTarjeta", sql.Char, req.params.numeroTarjeta)
+            .query('SELECT * FROM tarjetas WHERE numero = @numeroTarjeta');
         res.json(result.recordset);
     } catch (error) {
         console.error('Datos de tarjeta incorrectos:', error);
@@ -82,8 +82,8 @@ export const getUser = async (req, res) => {
     try {
         const pool = await getConnection();
         const result = await pool.request()
-            .input("gmail", sql.Char, req.params.gmail)
-            .query('SELECT * FROM users WHERE gmail = @gmail');
+            .input("gmailUser", sql.Char, req.params.gmailUser)
+            .query('SELECT * FROM users WHERE gmail = @gmailUser');
 
         if (result.recordset.length > 0) {
             return res.json(result.recordset);
@@ -145,8 +145,8 @@ export const getTransacciones = async (req, res) => {
     try {
         const pool = await getConnection();
         const result = await pool.request()
-            .input("numero", sql.Char, req.params.numero)
-            .query('SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN (SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A ON T.id = A.idTrans where A.numero = @numero;');
+            .input("numeroTarjeta", sql.Char, req.params.numeroTarjeta)
+            .query('SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN (SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A ON T.id = A.idTrans where A.numero = @numeroTarjeta;');
         res.json(result.recordset);
     } catch (error) {
         console.error('Error al conseguir transacciones de la tarjeta: ', error);

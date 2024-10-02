@@ -1,5 +1,6 @@
 create database pjCCVI
 use pjCCVI
+use master;
 DROP DATABASE pjCCVI;
 
 create table tarjetas (
@@ -45,13 +46,15 @@ create table cardsUser (
 
 -- Insertar datos de ejemplo en la tabla tarjetas
 
-INSERT INTO tarjetas (numero, titular, tipo, fecha_venc, num_seguridad, monto_autorizado, monto_disponible)
-VALUES 
-('1234567812345678', 'Jose Chalo', 'credito', '2025-12-31', '123', 5000.00, 2500.00),
-('2345678923456789', 'Regina', 'debito', '2024-10-30', '456', 1000.00, 500.00),
-('3456789034567890', 'Nazareth', 'credito', '2026-03-15', '789', 7500.00, 3000.00),
-('4567890145678901', 'Carlos Mendoza', 'debito', '2024-08-20', '012', 2000.00, 1500.00),
-('5678901256789012', 'Laura Perez', 'credito', '2025-07-25', '345', 6000.00, 4500.00);
+INSERT INTO tarjetas VALUES 
+('1234567812345678', 'Jose Chalo', 'credito', '2025-12-01', '123', 5000.00, 2500.00);
+
+INSERT INTO users VALUES ('josechalo2003@gmail.com', 'chalo', 'Jose Chalo');
+
+INSERT INTO cardsUser VALUES ('1234567812345678', 'josechalo2003@gmail.com');
+
+SELECT * FROM users WHERE gmail = 'josechalo2003@gmail.com';
+
 
 SELECT * FROM tarjetas;
 SELECT * FROM users;
