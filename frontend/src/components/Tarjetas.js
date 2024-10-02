@@ -1,36 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../stylesCSS/Tarjetas.css';
 import Navbar from '../components/Navbar';
+import { gmailUser } from './gmailUserContext.js'; // Importamos el contexto
 
 function Tarjetas() {
   const [tarjetas, setTarjetas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Obtenemos el correo del usuario usando el contexto
+  const { gmail } = useContext(gmailUser); 
+
   useEffect(() => {
-    const gmailUser = localStorage.getItem('gmail'); // Obtener el correo electrónico del usuario autenticado
-
-    if (!gmailUser) {
-      console.error('No se ha encontrado el correo del usuario en localStorage');
-      setLoading(false);
-      return;
+    if (gmail) { // Asegúrate de que el correo esté disponible
+      axios.get(`http://localhost:3001/tarjetas/user/${gmail}`)
+        .then(response => {
+          setTarjetas(response.data);
+          setLoading(false); // Una vez que cargan las tarjetas, deja de mostrar el loader
+        })
+        .catch(error => {
+          console.error('Error al obtener tarjetas:', error);
+          setLoading(false); // Manejar errores
+        });
     }
-
-    // Hacemos la solicitud para obtener las tarjetas
-    axios.get(`http://localhost:3001/tarjetas/user/${gmailUser}`)
-      .then(response => {
-        console.log('Respuesta de la API:', response.data); // Agregar un log para verificar los datos que llegan
-        setTarjetas(response.data);
-        setLoading(false); // Una vez que cargan las tarjetas, deja de mostrar el loader
-      })
-      .catch(error => {
-        console.error('Error al obtener tarjetas:', error);
-        setLoading(false); // Manejar errores
-      });
-  }, []);
+  }, [gmail]); // El efecto depende del correo
 
   if (loading) {
     return <p>Cargando tarjetas...</p>;
