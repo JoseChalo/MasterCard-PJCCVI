@@ -77,8 +77,7 @@ function Register() {
       console.error('Error en la conexión:', error);
     }
 
-    
-    
+
   };
 
   // Función para validar el formulario

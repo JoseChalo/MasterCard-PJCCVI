@@ -1,5 +1,6 @@
 create database pjCCVI
 use pjCCVI
+DROP DATABASE pjCCVI;
 
 create table tarjetas (
 	numero char(16),

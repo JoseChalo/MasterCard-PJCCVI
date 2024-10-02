@@ -15,7 +15,7 @@
   margin-bottom: 2px;
 }
 
-.inicio{
+.inicio {
   color: white;
   font-family: 'Helvetica Neue', sans-serif;
   margin-bottom: 15px;
@@ -27,38 +27,31 @@
   padding: 15px;
   border-radius: 10px;
   background-color: #222;
-  color: white;
+  color: white !important;
   display: flex;
   flex-direction: column;
   font-family: 'Helvetica Neue', sans-serif;
 }
 
-.login-form h2 {
-  font-family: 'Helvetica Neue', sans-serif;
-  font-weight: 500;
-}
-
-.inline-form-group1 {
+.inline-form-group1,
+.inline-form-group2 {
   display: flex;
 }
 
-.inline-form-group1 input::placeholder {
-  color: gray; 
-  opacity: 1;
+.inline-form-group1 input,
+.inline-form-group2 input {
+  color: white; /* Texto del campo de entrada */
+}
+
+.inline-form-group1 input::placeholder,
+.inline-form-group2 input::placeholder {
+  color: gray; /* Color del placeholder */
+  opacity: 0.8; /* Opacidad del placeholder */
 }
 
 .inline-form-group1 label {
   margin-right: 40px;
   margin-top: 5px;
-}
-
-.inline-form-group2 {
-  display: flex;
-}
-
-.inline-form-group2 input::placeholder {
-  color: gray;
-  opacity: 1;
 }
 
 .inline-form-group2 label {
@@ -73,7 +66,7 @@
 }
 
 .login-form .form-control {
-  background-color: #333;
+  background-color: #333; /* Fondo del campo de entrada */
   border: none;
   border-radius: 5px;
   font-family: 'Helvetica Neue', sans-serif;
@@ -82,12 +75,9 @@
 .login-form .form-control:focus {
   box-shadow: none;
   outline: none;
-  border: 2px solid #FF5F00 !important;
+  border: 2px solid #FF5F00 !important; /* Borde cuando está enfocado */
+  color: white; /* Asegurarse de que el texto sea blanco al hacer foco */
 }
-
-
-
-
 
 .button-container {
   display: flex;
@@ -108,15 +98,13 @@
 }
 
 .login-btn:hover {
-  background-color: #F69F14!important;
+  background-color: #F69F14 !important;
 }
-
-
-
 
 .login-links {
   width: 100%;
   display: flex;
+  justify-content: center !important; /* Centrar el enlace */
   font-family: 'Helvetica Neue', sans-serif;
   font-size: 0.9rem;
 }
@@ -127,6 +115,6 @@
 }
 
 .login-links a:hover {
-  color: #F69F14!important;
+  color: #F69F14 !important;
   text-decoration: underline;
 }
