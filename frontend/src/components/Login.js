@@ -41,6 +41,13 @@ const Login = () => {
     }
   };
 
+  const handleLogin = () => {
+    // Simula autenticación exitosa
+    localStorage.setItem('authToken', 'your-auth-token');
+    navigate('/home');
+  };
+  
+
   return (
     <div className="login-container">  {/* Contenedor principal del formulario de inicio de sesión */}
       <div className="login-logo">

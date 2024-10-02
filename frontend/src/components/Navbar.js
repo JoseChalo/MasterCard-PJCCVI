@@ -1,4 +1,3 @@
-// src/components/Navbar.js
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../stylesCSS/Navbar.css';
@@ -8,7 +7,10 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Redirigir al usuario a la página de inicio de sesión
+    // Eliminar el token de sesión (o cualquier otro estado de autenticación)
+    localStorage.removeItem('authToken');
+
+    // Redirigir al usuario a la página de inicio de sesión y evitar que use el botón de atrás
     navigate('/', { replace: true });
   };
 
