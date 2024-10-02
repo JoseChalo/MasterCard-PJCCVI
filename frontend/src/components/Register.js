@@ -69,18 +69,20 @@ function Register() {
           body: JSON.stringify(userData), // Convertir el objeto a JSON
         });
 
+        const msjError = await response.json();
+
         if (response.ok) {
           // Si la respuesta es exitosa, puedes manejar la respuesta aquí
           const result = await response.json();
           console.log('Usuario creado:', result);
           setGeneratedCard(cardData); // Guardar la tarjeta generada en el estado
           break; // Salir del bucle si el usuario se creó correctamente
-        } else if (response.status === 400) {
+        } else if (msjError.message == "El correo ya está registrado.") {
           // Manejar el error 400: Correo ya existe
           alert("El correo ya está registrado. Por favor, intenta con otro.");
           setIsButtonDisabled(false); // Reactivar el botón y los campos
           break; // Salir del bucle
-        } else if (response.status === 300) {
+        } else if (msjError.message == "El número de tarjeta ya está registrado.") {
           // Manejar el error 300: Tarjeta ya existe
           console.warn("La tarjeta ya existe, generando una nueva tarjeta...");
           cardData = generateCard(); // Generar una nueva tarjeta
