@@ -22,23 +22,30 @@ export const createUser = async (req, res) => {
     try {
         const gmailExist = await pool.request()
             .input("gmail", sql.VarChar, req.body.gmail)
-            .query('SELECT * FROM  users WHERE gmail = @gmail');
+            .query('SELECT * FROM users WHERE gmail = @gmail');
 
         const tarjetaExist = await pool.request()
             .input("numero", sql.VarChar, req.body.numero)
-            .query('SELECT * FROM  tarjetas WHERE numero = @numero');
+            .query('SELECT * FROM tarjetas WHERE numero = @numero');
 
-        if (gmailExist.recordset[0] == null) {
-            return res.status(400).send("El correo ya esta registrado, utilice otro.");
-        } else if (tarjetaExist.recordset[0] == null) {
-            return res.status(300).send("Numero de tarjeta ya existente.");
+        // Si ya existe el gmail, devolver conflicto (409)
+        if (gmailExist.recordset.length > 0) {
+            return res.status(409).json({ message: "El correo ya está registrado." });
         }
+        
+        // Si ya existe la tarjeta, devolver conflicto (409)
+        if (tarjetaExist.recordset.length > 0) {
+            return res.status(409).json({ message: "El número de tarjeta ya está registrado." });
+        }
+
+        // Crear el usuario
         const resultUser = await pool.request()
             .input("gmail", sql.VarChar, req.body.gmail)
             .input("contra", sql.VarChar, req.body.contra)
             .input("nombre", sql.VarChar, req.body.nombre)
             .query('INSERT INTO users (gmail, contra, nombre) VALUES (@gmail, @contra, @nombre)');
 
+        // Crear la tarjeta
         const resultTarjeta = await pool.request()
             .input("numero", sql.Char, req.body.numero)
             .input("titular", sql.Char, req.body.titular)
@@ -49,20 +56,25 @@ export const createUser = async (req, res) => {
             .input("monto_disponible", sql.Numeric, req.body.monto_disponible)
             .query('INSERT INTO tarjetas (numero, titular, tipo, fecha_venc, num_seguridad, monto_autorizado, monto_disponible) VALUES (@numero, @titular, @tipo, @fecha_venc, @num_seguridad, @monto_autorizado, @monto_disponible)');
 
+        // Asociar la tarjeta con el usuario
         const resultCardsUser = await pool.request()
             .input("numeroTarjeta", sql.Char, req.body.numero)
             .input("idUser", sql.VarChar, req.body.gmail)
             .query('INSERT INTO cardsUser (numeroTarjeta, idUser) VALUES (@numeroTarjeta, @idUser)');
 
-        res.json({
+        // Devolver respuesta exitosa
+        res.status(201).json({
+            message: "Usuario y tarjeta creados exitosamente.",
             userId: req.body.gmail,
             tarjetaId: req.body.numero
         });
+        
     } catch (error) {
         console.error('Error al crear usuario y tarjeta:', error);
         res.status(500).send("Error al crear usuario y tarjeta.");
     }
 };
+
 
 export const getUser = async (req, res) => {
     try {
