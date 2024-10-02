@@ -20,10 +20,10 @@ export const getTarjetas = async (req, res) => {
         `);
   
       if (result.recordset.length > 0) {
-        // Devolvemos solo los últimos 4 dígitos de la tarjeta
+        // Devolvemos la nueracion completa 
         const tarjetas = result.recordset.map(tarjeta => ({
           nombre: tarjeta.nombre,
-          ultimosDigitos: tarjeta.ultimosDigitos.slice(-4), // Solo últimos 4 dígitos
+          ultimosDigitos: tarjeta.ultimosDigitos,
           fechaVencimiento: tarjeta.fechaVencimiento,
         }));
         res.json(tarjetas);

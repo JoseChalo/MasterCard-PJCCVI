@@ -53,7 +53,7 @@ function Tarjetas() {
               <Accordion.Body>
                 <p>Fecha de Vencimiento: {tarjeta.fechaVencimiento}</p>
                 <p>Nombre: {tarjeta.nombre}</p>
-                <p>Últimos 4 Dígitos: {tarjeta.ultimosDigitos}</p>
+                <p>Numeracion de la tarjeta: {tarjeta.ultimosDigitos}</p>
                 <Link to="/compras">Ver más detalles</Link>
               </Accordion.Body>
             </Accordion.Item>

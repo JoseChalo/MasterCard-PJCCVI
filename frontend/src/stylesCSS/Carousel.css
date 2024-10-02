@@ -11,18 +11,42 @@
     object-fit: cover;
 }
 
+/* Color de texto general para los enlaces */
 .carousel-item a {
-    background-color: rgba(0, 0, 0, 0.7); /* Aumenta la transparencia */
-    color: white;
+    background-color: rgba(0, 0, 0, 0); /* Fondo transparente */
+    color: rgb(12, 12, 12); /* Color de texto oscuro */
     padding: 15px 30px; /* Botones más grandes */
     font-size: 18px; /* Ajusta el tamaño del texto */
     border-radius: 10px;
 }
 
-.carousel-caption h3 {
-    font-size: 2rem;
+/* Estilos específicos para el texto en las leyendas */
+.carousel-caption h4, .carousel-caption p {
+    color: #ffffff; /* Color blanco por defecto */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Agrega un contorno oscuro al texto */
+    margin: 0;
 }
 
+/* Cambia el color del enlace cuando el ratón pasa por encima */
+.carousel-caption a {
+    color: #ffcc00; /* Color amarillo para los enlaces */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Hover para enlaces */
+.carousel-caption a:hover {
+    color: #ff9900; /* Cambia ligeramente el color en hover */
+}
+
+/* Texto de título */
+.carousel-caption h3 {
+    font-size: 2rem;
+    color: #ffffff; /* Asegúrate de que el título sea visible */
+}
+
+/* Texto de descripción */
 .carousel-caption p {
     font-size: 1.2rem;
+    color: #ffffff; /* Asegúrate de que la descripción sea visible */
 }
