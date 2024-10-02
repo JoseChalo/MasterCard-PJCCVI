@@ -4,17 +4,36 @@ import {
 import sql from 'mssql'
 
 export const getTarjetas = async (req, res) => {
+    const { gmailUser } = req.params; // Usamos el correo del usuario
     try {
-        const pool = await getConnection();
-        const result = await pool.request()
-            .input("numeroTarjeta", sql.Char, req.params.numeroTarjeta)
-            .query('SELECT * FROM tarjetas WHERE numero = @numeroTarjeta');
-        res.json(result.recordset);
+      const pool = await getConnection();
+  
+      // Realizamos la consulta que une las tablas 'users', 'cardsUser' y 'tarjetas'
+      const result = await pool.request()
+        .input('gmailUser', sql.VarChar, gmailUser)
+        .query(`
+          SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento
+          FROM tarjetas T
+          INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
+          INNER JOIN users U ON U.gmail = CU.idUser
+          WHERE U.gmail = @gmailUser
+        `);
+  
+      if (result.recordset.length > 0) {
+        // Devolvemos solo los últimos 4 dígitos de la tarjeta
+        const tarjetas = result.recordset.map(tarjeta => ({
+          nombre: tarjeta.nombre,
+          ultimosDigitos: tarjeta.ultimosDigitos.slice(-4), // Solo últimos 4 dígitos
+          fechaVencimiento: tarjeta.fechaVencimiento,
+        }));
+        res.json(tarjetas);
+      } else {
+        res.status(404).json({ message: 'No se encontraron tarjetas para este usuario.' });
+      }
     } catch (error) {
-        console.error('Datos de tarjeta incorrectos:', error);
-        res.status(500).send("Datos de tarjeta incorrectos.");
+      res.status(500).json({ message: 'Error al obtener las tarjetas', error });
     }
-};
+  };
 
 export const createUser = async (req, res) => {
     try {
