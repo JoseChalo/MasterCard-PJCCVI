@@ -6,7 +6,6 @@ import axios from 'axios';
 import '../stylesCSS/Login.css';
 import logo from '../images/logoMastercard.png';
 
-// Definir el componente Login
 const Login = () => {
   const [gmail, setGmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,15 +14,19 @@ const Login = () => {
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      // Realizar la petición GET al backend
       const response = await axios.get(`http://localhost:3001/user/${gmail}`);
       const userData = response.data[0];
       
       if (userData && userData.contra === password) {
         console.log('Inicio de sesión exitoso');
-        navigate('/Home');
+        
+        // Almacenar el token de autenticación en localStorage
+        localStorage.setItem('authToken', 'your-auth-token');
+        
+        // Navegar a la página protegida
+        navigate('/home');
       } else {
         alert('Contraseña incorrecta');
       }
@@ -41,22 +44,14 @@ const Login = () => {
     }
   };
 
-  const handleLogin = () => {
-    // Simula autenticación exitosa
-    localStorage.setItem('authToken', 'your-auth-token');
-    navigate('/home');
-  };
-  
-
   return (
-    <div className="login-container">  {/* Contenedor principal del formulario de inicio de sesión */}
+    <div className="login-container">
       <div className="login-logo">
         <img src={logo} alt="Mastercard Logo" className="logo"/>
       </div>
-      <Form className="login-form" onSubmit={handleSubmit}> {/* Formulario de inicio de sesión */}
+      <Form className="login-form" onSubmit={handleSubmit}>
         <h3 className="inicio">Iniciar Sesión</h3>
 
-        {/* Grupo para el campo de usuario */}
         <Form.Group className="mb-3 inline-form-group1" controlId="formBasicUser">
           <Form.Label>Usuario</Form.Label>
           <Form.Control
@@ -68,7 +63,6 @@ const Login = () => {
           />
         </Form.Group>
 
-        {/* Grupo para el campo de contraseña */}
         <Form.Group className="mb-3 inline-form-group2" controlId="formBasicPassword">
           <Form.Label>Contraseña</Form.Label>
           <Form.Control
@@ -80,14 +74,12 @@ const Login = () => {
           />
         </Form.Group>
 
-        {/* Botón para iniciar sesión */}
         <div className="button-container">
           <Button type="submit" className="login-btn buttonColor">
             Ingresar
           </Button>
         </div>
 
-        {/* Enlace para crear usuario*/}
         <div className="login-links mt-3 d-flex justify-content-between">
           <Link to="/register" className="text-muted">Crear Usuario</Link>
         </div>

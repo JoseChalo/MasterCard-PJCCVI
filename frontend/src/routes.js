@@ -13,20 +13,25 @@ import Tarjetas from './components/Tarjetas';
 const isAuthenticated = () => !!localStorage.getItem('authToken');
 
 // Componente de ruta protegida
-const ProtectedRoute = ({ element: Component }) => {
-  return isAuthenticated() ? Component : <Navigate to="/" />;
+const ProtectedRoute = ({ element }) => {
+  return isAuthenticated() ? element : <Navigate to="/" replace />;
 };
 
 const AppRoutes = () => {
   return (
     <Router>
       <Routes>
+        {/* Ruta de login */}
         <Route path="/" element={<Login />} />
+
+        {/* Rutas protegidas */}
         <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
         <Route path="/pagar" element={<ProtectedRoute element={<Pagar />} />} />
         <Route path="/compras" element={<ProtectedRoute element={<VerCompras />} />} />
         <Route path="/fechas" element={<ProtectedRoute element={<FechasDeCorteYPago />} />} />
         <Route path="/tarjetas" element={<ProtectedRoute element={<Tarjetas />} />} />
+
+        {/* Rutas abiertas */}
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
@@ -35,3 +40,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+
