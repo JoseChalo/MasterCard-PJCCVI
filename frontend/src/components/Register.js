@@ -70,16 +70,16 @@ function Register() {
         });
 
         if (response.ok) {
-          // Si la respuesta es exitosa, puedes manejar la respuesta aquí
+          // Si la respuesta es exitosa
           const result = await response.json();
           console.log('Usuario creado:', result);
           setGeneratedCard(cardData); // Guardar la tarjeta generada en el estado
-          break; // Salir del bucle si el usuario se creó correctamente
+          break;
         } else if (response.status === 400) {
           // Manejar el error 400: Correo ya existe
           alert("El correo ya está registrado. Por favor, intenta con otro.");
           setIsButtonDisabled(false); // Reactivar el botón y los campos
-          break; // Salir del bucle
+          break;
         } else if (response.status === 300) {
           // Manejar el error 300: Tarjeta ya existe
           console.warn("La tarjeta ya existe, generando una nueva tarjeta...");
@@ -89,15 +89,15 @@ function Register() {
           // Manejar otros errores del servidor
           console.error('Error al crear usuario:', response.status);
           alert("Ocurrió un error inesperado. Intenta nuevamente.");
-          setIsButtonDisabled(false); // Reactivar el botón
-          break; // Salir del bucle
+          setIsButtonDisabled(false);
+          break;
         }
       } catch (error) {
-        // Manejar errores de red o del fetch
+        // Manejar errores
         console.error('Error en la conexión:', error);
         alert("Error de conexión. Por favor, revisa tu conexión a internet.");
         setIsButtonDisabled(false); // Reactivar el botón 
-        break; // Salir del bucle
+        break;
       }
     }
   };
