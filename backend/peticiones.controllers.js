@@ -9,7 +9,7 @@ export const getTarjetas = async (req, res) => {
         const result = await pool.request()
             .input("numero", sql.Char, req.params.numero)
             .query('SELECT * FROM tarjetas WHERE numero = @numero');
-        res.json(result.recordset);    
+        res.json(result.recordset);
     } catch (error) {
         await pool.request().rollbackTransaction();
         console.error('Datos de tarjeta incorrectos:', error);
@@ -21,14 +21,14 @@ export const createUser = async (req, res) => {
     const pool = await getConnection();
     try {
         const gmailExist = await pool.request()
-        .input("gmail", sql.VarChar, req.body.gmail)
-        .query('SELECT * FROM  users WHERE gmail = @gmail');
+            .input("gmail", sql.VarChar, req.body.gmail)
+            .query('SELECT * FROM  users WHERE gmail = @gmail');
 
         const tarjetaExist = await pool.request()
-        .input("numero", sql.VarChar, req.body.numero)
-        .query('SELECT * FROM  tarjetas WHERE numero = @numero');
+            .input("numero", sql.VarChar, req.body.numero)
+            .query('SELECT * FROM  tarjetas WHERE numero = @numero');
 
-        if(gmailExist.recordset[0] == null){
+        if (gmailExist.recordset[0] == null) {
             return res.status(400).send("El correo ya esta registrado, utilice otro.");
         } else if (tarjetaExist.recordset[0] == null) {
             return res.status(300).send("Numero de tarjeta ya existente.");
@@ -70,9 +70,14 @@ export const getUser = async (req, res) => {
         const result = await pool.request()
             .input("gmail", sql.Char, req.params.gmail)
             .query('SELECT * FROM users WHERE gmail = @gmail');
-        res.json(result.recordset);
+
+        if (result.recordset != null) {
+            return res.json(result.recordset);
+        } else {
+            return res.status(400).send('Usuario no encontrado.');
+        }
     } catch (error) {
-        // await pool.request().rollbackTransaction();
+        await pool.request().rollbackTransaction();
         console.error('Datos de usuario incorrectos:', error);
         res.status(500).send("Datos de usuario incorrectos.");
     }
@@ -92,7 +97,7 @@ export const createTarjeta = async (req, res) => {
             .query('INSERT INTO tarjetas (numero, titular, tipo, fecha_venc, num_seguridad, monto_autorizado, monto_disponible) VALUES (@numero, @titular, @tipo, @fecha_venc, @num_seguridad, @monto_autorizado, @monto_disponible)');
         res.json({
             tarjetaId: result.recordset[0]
-        });  
+        });
     } catch (error) {
         await pool.request().rollbackTransaction();
         console.error('Error al crear tarjeta:', error);
@@ -107,13 +112,13 @@ export const createTransacciones = async (req, res) => {
         const resultTransaccion = await pool.request()
             .input("monto", sql.Numeric, req.body.numero)
             .input("tipo", sql.Char, req.body.titular)
-            .query('INSERT INTO transacciones (monto, tipo) VALUES (@monto, @tipo)');  
+            .query('INSERT INTO transacciones (monto, tipo) VALUES (@monto, @tipo)');
 
         const resultTransEchas = await pool.request()
             .input("numeroTarjeta", sql.Char, req.body.numero)
             .input("idTrans", sql.Int, req.body.titular)
             .query('INSERT INTO trans_echas (numeroTarjeta, idTrans) VALUES (@numeroTarjeta, @idTrans)');
-            
+
         res.json({
             TransaccionId: resultTransaccion.recordset[0],
             TransEchas: resultTransEchas.recordset[0]
@@ -131,7 +136,7 @@ export const getTransacciones = async (req, res) => {
         const result = await pool.request()
             .input("numero", sql.Char, req.params.numero)
             .query('SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN (SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A ON T.id = A.idTrans where A.numero = @numero;');
-        res.json(result.recordset); 
+        res.json(result.recordset);
     } catch (error) {
         await pool.request().rollbackTransaction();
         console.error('Error al conseguir transacciones de la tarjeta: ', error);
@@ -141,7 +146,15 @@ export const getTransacciones = async (req, res) => {
 
 export const autorizacionTarjeta = async (req, res) => {
     try {
-        const { tarjeta, nombre, fecha_venc, num_seguridad, monto, tienda, formato } = req.query;
+        const {
+            tarjeta,
+            nombre,
+            fecha_venc,
+            num_seguridad,
+            monto,
+            tienda,
+            formato
+        } = req.query;
         const pool = await getConnection();
         const result = await pool.request()
             .input("numero", sql.Char, tarjeta)
@@ -152,7 +165,7 @@ export const autorizacionTarjeta = async (req, res) => {
         if (!tarjetaInfo) {
             return res.status(404).send("Tarjeta no encontrada.");
         }
-       if (nombre !== tarjetaInfo.titular) {
+        if (nombre !== tarjetaInfo.titular) {
             return res.status(400).send("Error: El nombre del titular es incorrecto.");
         }
         if (fecha_venc !== tarjetaInfo.fecha_venc) {
@@ -192,4 +205,3 @@ export const autorizacionTarjeta = async (req, res) => {
         return res.status(500).send("Datos de tarjeta incorrectos.");
     }
 };
-
