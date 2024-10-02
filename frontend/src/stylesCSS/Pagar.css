@@ -18,7 +18,7 @@
 }
 
 .pagar-title {
-  color: #ff5900;
+  color: #fff;
   font-size: 2rem;
   margin-bottom: 20px;
 }
@@ -58,4 +58,21 @@
 
 .pagar-btn:hover {
   background-color: #f69f14;
+}
+
+.pagar-mensaje {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #ff5900; 
+}
+
+.monto-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  margin-top: 7px;
+  margin-right: 5px;
+  font-weight: bold;
 }
