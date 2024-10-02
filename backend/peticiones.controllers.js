@@ -20,6 +20,19 @@ export const getTarjetas = async (req, res) => {
 export const createUser = async (req, res) => {
     const pool = await getConnection();
     try {
+        const gmailExist = await pool.request()
+        .input("gmail", sql.VarChar, req.body.gmail)
+        .query('SELECT * FROM  users WHERE gmail = @gmail');
+
+        const tarjetaExist = await pool.request()
+        .input("numero", sql.VarChar, req.body.numero)
+        .query('SELECT * FROM  tarjetas WHERE numero = @numero');
+
+        if(gmailExist.recordset[0] == null){
+            return res.status(400).send("El correo ya esta registrado, utilice otro.");
+        } else if (tarjetaExist.recordset[0] == null) {
+            return res.status(300).send("Numero de tarjeta ya existente.");
+        }
         const resultUser = await pool.request()
             .input("gmail", sql.VarChar, req.body.gmail)
             .input("contra", sql.VarChar, req.body.contra)
@@ -43,8 +56,7 @@ export const createUser = async (req, res) => {
 
         res.json({
             userId: req.body.gmail,
-            tarjetaId: req.body.numero,
-            resultCardsUser: resultCardsUser 
+            tarjetaId: req.body.numero
         });
     } catch (error) {
         console.error('Error al crear usuario y tarjeta:', error);
@@ -60,7 +72,7 @@ export const getUser = async (req, res) => {
             .query('SELECT * FROM users WHERE gmail = @gmail');
         res.json(result.recordset);
     } catch (error) {
-        await pool.request().rollbackTransaction();
+        // await pool.request().rollbackTransaction();
         console.error('Datos de usuario incorrectos:', error);
         res.status(500).send("Datos de usuario incorrectos.");
     }
@@ -140,13 +152,12 @@ export const autorizacionTarjeta = async (req, res) => {
         if (!tarjetaInfo) {
             return res.status(404).send("Tarjeta no encontrada.");
         }
-
-       /* if (nombre !== tarjetaInfo.titular) {
+       if (nombre !== tarjetaInfo.titular) {
             return res.status(400).send("Error: El nombre del titular es incorrecto.");
-        }*/
-        /*if (fecha_venc !== tarjetaInfo.fecha_venc) {
+        }
+        if (fecha_venc !== tarjetaInfo.fecha_venc) {
             return res.status(400).send("Error: La fecha de vencimiento es incorrecta.");
-        }*/
+        }
         if (num_seguridad !== tarjetaInfo.num_seguridad) {
             return res.status(400).send("Error: El número de seguridad es incorrecto.");
         }
@@ -158,7 +169,7 @@ export const autorizacionTarjeta = async (req, res) => {
             return res.json({
                 "autorización": {
                     "emisor": "MasterCard",
-                    "tarjeta": tarjetaInfo.tipo,
+                    "tarjeta": tarjetaInfo.titular,
                     "status": 1,
                     "numero": tarjetaInfo.numero
                 }
@@ -167,7 +178,7 @@ export const autorizacionTarjeta = async (req, res) => {
             const xmlResponse = `
                 <autorizacion>
                     <emisor>MasterCard</emisor>
-                    <tarjeta>${tarjetaInfo.tipo}</tarjeta>
+                    <tarjeta>${tarjetaInfo.titular}</tarjeta>
                     <status>1</status>
                     <numero>${tarjetaInfo.numero}</numero>
                 </autorizacion>
