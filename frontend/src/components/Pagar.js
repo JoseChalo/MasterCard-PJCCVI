@@ -4,30 +4,49 @@ import Navbar from '../components/Navbar';
 
 const Pagar = () => {
   const [monto, setMonto] = useState('');
+  const [numeroTarjeta, setNumeroTarjeta] = useState('');
 
   const manejarPago = (e) => {
     e.preventDefault();
-    alert(`Se ha realizado un pago de Q${monto}`);
+    alert(`Se ha realizado un pago de Q${monto} con la tarjeta ${numeroTarjeta}`);
     setMonto('');
+    setNumeroTarjeta('');
   };
 
   return (
     <div>
-      <Navbar /> {/* Asegúrate que el Navbar esté fuera del contenido */}
+      <Navbar /> {/* Navbar manteniéndose en la parte superior */}
       <div className="pagar-container">
-        <h1>Realizar Pago</h1>
-        <form onSubmit={manejarPago}>
-          <label>
-            Monto a pagar:
-            <input
-              type="number"
-              value={monto}
-              onChange={(e) => setMonto(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Pagar</button>
-        </form>
+        <div className="pagar-card">
+          <h1 className="pagar-title">Realizar Pago</h1>
+          <form onSubmit={manejarPago}>
+            <label className="pagar-label">
+              Número de Tarjeta:
+              <input
+                type="text"
+                value={numeroTarjeta}
+                onChange={(e) => setNumeroTarjeta(e.target.value)}
+                className="pagar-input"
+                placeholder="Ingrese el número de la tarjeta"
+                required
+              />
+            </label>
+            <label className="pagar-label">
+              Monto a pagar:
+              <input
+                type="number"
+                value={monto}
+                onChange={(e) => setMonto(e.target.value)}
+                className="pagar-input"
+                placeholder="Ingrese el monto"
+                required
+              />
+            </label>
+            <div className="pagar-btn-container">
+              <button type="submit" className="pagar-btn">Pagar</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
