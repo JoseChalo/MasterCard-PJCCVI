@@ -1,5 +1,5 @@
 create database pjCCVI
-use pjCCVI
+use pjCCVI;
 use master;
 DROP DATABASE pjCCVI;
 
