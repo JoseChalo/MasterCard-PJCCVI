@@ -29,7 +29,19 @@
   justify-content: center;
 }
 
-.card-front, .card-back {
+.card-front {
+  background-image: url('../images/Cardd.png');
+  background-color: #1E1E1E !important;
+  border: none !important;
+  background-size: cover !important; 
+  color: white !important;
+  width: 350px; 
+  height: 200px !important;
+  margin-left: 50px;
+  display: flex;
+}
+
+.card-back {
   background-image: url('../images/Card.png');
   background-color: #1E1E1E !important;
   border: none !important;

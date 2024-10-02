@@ -46,7 +46,6 @@ const Login = () => {
         {/* Enlaces para crear usuario y reestablecer contraseña */}
         <div className="login-links mt-3 d-flex justify-content-between">
           <Link to="/register" className="text-muted">Crear Usuario</Link>
-          <Link to="/forgot-password" className="text-muted">Reestablecer contraseña</Link>
         </div>
       </Form>
     </div>
