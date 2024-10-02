@@ -233,3 +233,28 @@ export const autorizacionTarjeta = async (req, res) => {
         return res.status(500).send("Error en la autorización de tarjeta.");
     }
 };
+
+export const pagar = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const aumentarMonto = await pool.request()
+            .input("numero", sql.Char, req.body.numero)
+            .input("monto", sql.Numeric, req.body.monto)
+            .query('UPDATE tarjetas SET monto_disponible = monto_disponible + @monto WHERE numero = @numero;');
+        const insertTransacciones = await pool.request()
+            .input("monto", sql.Numeric, monto)
+            .query("INSERT INTO transacciones (monto, proveniente, tipo) VALUES (@monto, Pago, 'pago'); SELECT SCOPE_IDENTITY() AS id;");
+        const insertTrans_echas = await pool.request()
+            .input("numero", sql.Char, tarjeta)
+            .input("idTrans", sql.Int, insertTransacciones.recordset[0].id)
+            .query('INSERT INTO trans_echas (numeroTarjeta, idTrans) VALUES (@numero, @idTrans);');
+
+        res.send('Tarjeta Pagada');
+        res.json({
+            Mensaje: 'Tarjeta Pagada',
+        });
+    } catch (error) {
+        console.error('Error al crear tarjeta:', error);
+        res.status(500).send("Error al crear tarjeta.");
+    }
+};
