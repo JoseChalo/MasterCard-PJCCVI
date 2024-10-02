@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../stylesCSS/Navbar.css';
+import LogoMasterCard from '../images/LogoMasterCard.avif';
+
 
 const Navbar = () => {
   return (
@@ -8,7 +10,7 @@ const Navbar = () => {
       <div className="navbar-brand">
         <Link to="/">Mastercard</Link>
         <img
-            src="https://images.wsj.net/im-45496?width=860&size=1.5&pixel_ratio=2"
+            src={LogoMasterCard}
             alt="Mastercard Logo"
             className="navbar-logo"
           />

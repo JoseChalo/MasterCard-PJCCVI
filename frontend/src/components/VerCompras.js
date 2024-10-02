@@ -1,6 +1,6 @@
-// src/components/VerCompras.js
 import React from 'react';
 import '../stylesCSS/VerCompras.css';
+import Navbar from '../components/Navbar';
 
 const VerCompras = () => {
   const compras = [
@@ -9,17 +9,20 @@ const VerCompras = () => {
   ];
 
   return (
-    <div className="compras-container">
-      <h2 className="compras-title">Compras Realizadas</h2>
-      <ul className="compras-list">
-        {compras.map((compra) => (
-          <li key={compra.id} className="compra-item">
-            <span className="compra-descripcion">{compra.descripcion}</span> 
-            <span className="compra-monto">Q{compra.monto}</span>
-            <span className="compra-fecha">{compra.fecha}</span>
-          </li>
-        ))}
-      </ul>
+    <div>
+      <Navbar /> {/* Coloca el Navbar fuera del contenido principal */}
+      <div className="compras-container">
+        <h2 className="compras-title">Compras Realizadas</h2>
+        <ul className="compras-list">
+          {compras.map((compra) => (
+            <li key={compra.id} className="compra-item">
+              <span className="compra-descripcion">{compra.descripcion}</span> 
+              <span className="compra-monto">Q{compra.monto}</span>
+              <span className="compra-fecha">{compra.fecha}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

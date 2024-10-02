@@ -2,6 +2,16 @@ import React, { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
+import Pagos from '../images/Pagos.webp';
+import compras from '../images/compras.jpg';
+import fechas from '../images/fechas.jpg';
+
+import '../stylesCSS/Carousel.css';
+
+
+
+//import ControlledCarousel from './Carousel'; 
+
 
 function ControlledCarousel() {
   const [index, setIndex] = useState(0);
@@ -13,19 +23,19 @@ function ControlledCarousel() {
   const slides = [
     {
       id: 1,
-      src: 'https://ak.picdn.net/shutterstock/videos/13989107/thumb/1.jpg',
+      src: Pagos,
       url: '/pagar',
       alt: 'Pagos',
     },
     {
       id: 2,
-      src: 'https://sun9-37.userapi.com/impf/Gf9mVv8SA9LklW5CfwwC-tA_NkP4FQFh3O_Atw/u4RoFeYD_wo.jpg?size=1920x768&quality=95&crop=0,131,1600,639&sign=964dd3dfae666a326cdd690788550670&type=cover_grou',
+      src: compras,
       url: '/compras',
       alt: 'Compras',
     },
     {
       id: 3,
-      src: 'https://www.plus.ac.at/wp-content/uploads/2021/10/iStock-1313433542_2021-10-11_Doucefleur_WEB-scaled.jpg',
+      src: fechas,
       url: '/fechas',
       alt: 'Fechas',
     }

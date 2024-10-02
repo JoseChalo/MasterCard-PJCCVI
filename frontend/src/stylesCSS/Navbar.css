@@ -12,6 +12,7 @@ body {
   padding: 12px 40px;
   background-color: #1a0d0e; /* Color oscuro del navbar */
   border-bottom: 1px solid #39282c; /* Línea separadora */
+  z-index: 1000;
 }
 
 .navbar-brand a {
@@ -35,6 +36,7 @@ body {
 .navbar-links {
   display: flex;
   gap: 24px; /* Espacio entre los enlaces */
+  list-style: none;
 }
 
 .navbar-links li {
