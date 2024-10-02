@@ -28,14 +28,17 @@ export const createUser = async (req, res) => {
             .input("numero", sql.VarChar, req.body.numero)
             .query('SELECT * FROM tarjetas WHERE numero = @numero');
 
-        // Si ya existe el gmail, devolver conflicto (409)
+        // Si ya existe el gmail
         if (gmailExist.recordset.length > 0) {
-            return res.status(409).json({ message: "El correo ya está registrado." });
+            return res.status(409).json({
+                message: "El correo ya está registrado."
+            });
         }
-        
-        // Si ya existe la tarjeta, devolver conflicto (409)
+        // Si ya existe la tarjeta
         if (tarjetaExist.recordset.length > 0) {
-            return res.status(409).json({ message: "El número de tarjeta ya está registrado." });
+            return res.status(409).json({
+                message: "El número de tarjeta ya está registrado."
+            });
         }
 
         // Crear el usuario
@@ -68,7 +71,7 @@ export const createUser = async (req, res) => {
             userId: req.body.gmail,
             tarjetaId: req.body.numero
         });
-        
+
     } catch (error) {
         console.error('Error al crear usuario y tarjeta:', error);
         res.status(500).send("Error al crear usuario y tarjeta.");
@@ -83,7 +86,7 @@ export const getUser = async (req, res) => {
             .input("gmail", sql.Char, req.params.gmail)
             .query('SELECT * FROM users WHERE gmail = @gmail');
 
-        if (result.recordset != null) {
+        if (result.recordset.length > 0) {
             return res.json(result.recordset);
         } else {
             return res.status(400).send('Usuario no encontrado.');
@@ -171,49 +174,67 @@ export const autorizacionTarjeta = async (req, res) => {
         const result = await pool.request()
             .input("numero", sql.Char, tarjeta)
             .query('SELECT * FROM tarjetas WHERE numero = @numero;');
+        const fechaFormat = await pool.request()
+            .input("numero", sql.Char, tarjeta)
+            .query("SELECT FORMAT(fecha_venc, 'yyyy-MM') AS fecha_venc FROM tarjetas WHERE numero = @numero;");
 
         const tarjetaInfo = result.recordset[0];
 
-        if (!tarjetaInfo) {
-            return res.status(404).send("Tarjeta no encontrada.");
-        }
-        if (nombre !== tarjetaInfo.titular) {
-            return res.status(400).send("Error: El nombre del titular es incorrecto.");
-        }
-        if (fecha_venc !== tarjetaInfo.fecha_venc) {
-            return res.status(400).send("Error: La fecha de vencimiento es incorrecta.");
-        }
-        if (num_seguridad !== tarjetaInfo.num_seguridad) {
-            return res.status(400).send("Error: El número de seguridad es incorrecto.");
-        }
-        if (monto > tarjetaInfo.monto_disponible) {
-            return res.status(400).send("Error: El monto excede el monto disponible.");
-        }
-
-        if (formato == 'json') {
+        if ((result.recordset.length <= 0) ||
+            (nombre.trim() !== tarjetaInfo.titular.trim()) ||
+            (fecha_venc >= fechaFormat.recordset[0].fecha_venc) ||
+            (num_seguridad.trim() !== tarjetaInfo.num_seguridad.trim()) ||
+            (monto > tarjetaInfo.monto_disponible)) {
+            console.log('Parametros incorrectos.');
             return res.json({
                 "autorización": {
                     "emisor": "MasterCard",
-                    "tarjeta": tarjetaInfo.titular,
+                    "tarjeta": nombre,
+                    "status": 0,
+                    "numero": tarjeta
+                }
+            });
+        }
+
+        const resultCambioMonto = await pool.request()
+            .input("numero", sql.Char, tarjeta)
+            .input("monto", sql.Numeric, monto)
+            .query('UPDATE tarjetas SET monto_disponible = monto_disponible - @monto WHERE numero = @numero;');
+        const insertTransacciones = await pool.request()
+            .input("monto", sql.Numeric, monto)
+            .input("proveniente", sql.VarChar, tienda)
+            .query("INSERT INTO transacciones (monto, proveniente, tipo) VALUES (@monto, @proveniente, 'consumo'); SELECT SCOPE_IDENTITY() AS id;");
+        const insertTrans_echas = await pool.request()
+            .input("numero", sql.Char, tarjeta)
+            .input("idTrans", sql.Int, insertTransacciones.recordset[0].id)
+            .query('INSERT INTO trans_echas (numeroTarjeta, idTrans) VALUES (@numero, @idTrans);');
+        
+
+        if (formato == 'json') {
+            console.log("Pago echo exitosamente. ");
+            return res.json({
+                "autorización": {
+                    "emisor": "MasterCard",
+                    "tarjeta": tarjetaInfo.titular.trim(),
                     "status": 1,
-                    "numero": tarjetaInfo.numero
+                    "numero": tarjetaInfo.numero.trim()
                 }
             });
         } else if (formato == 'xml') {
+            console.log("Pago echo exitosamente. ");
             const xmlResponse = `
                 <autorizacion>
                     <emisor>MasterCard</emisor>
-                    <tarjeta>${tarjetaInfo.titular}</tarjeta>
+                    <tarjeta>${tarjetaInfo.titular.trim()}</tarjeta>
                     <status>1</status>
-                    <numero>${tarjetaInfo.numero}</numero>
+                    <numero>${tarjetaInfo.numero.trim()}</numero>
                 </autorizacion>
             `;
             res.set('Content-Type', 'application/xml');
             return res.send(xmlResponse);
         }
     } catch (error) {
-        await pool.request().rollbackTransaction();
-        console.error('Error en la autorización de tarjeta:', error);
-        return res.status(500).send("Datos de tarjeta incorrectos.");
+        console.error('Error en la autorización de tarjeta: ', error);
+        return res.status(500).send("Error en la autorización de tarjeta.");
     }
 };
