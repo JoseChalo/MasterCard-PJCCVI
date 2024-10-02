@@ -5,10 +5,10 @@ import ControlledCarousel from '../components/Carousel';
 import axios from 'axios';
 import '../stylesCSS/Home.css';
 //import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Pagar from '../components/Pagar';
-import VerCompras from '../components/VerCompras';
-import FechasDeCorteYPago from '../components/FechasDeCorteYPago';
-import Tarjetas from '../components/Tarjetas';
+//import Pagar from '../components/Pagar';
+//import VerCompras from '../components/VerCompras';
+//import FechasDeCorteYPago from '../components/FechasDeCorteYPago';
+//import Tarjetas from '../components/Tarjetas';
 
 const Home = () => {
   const [items, setItems] = useState([]);
