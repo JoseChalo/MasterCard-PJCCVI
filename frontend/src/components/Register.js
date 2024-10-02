@@ -14,16 +14,21 @@ function Register() {
   const [generatedCard, setGeneratedCard] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Función para generar una tarjeta aleatoria
-  const generateCard = () => {
-    const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
-    const targetType = "credito";
-    const expirationDate = `${Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0')}/${Math.floor(Math.random() * 5 + 25)}`;
-    const securityCode = Math.floor(Math.random() * 900 + 100).toString();
-    const authorizedAmount = 5000;
-    const availableAmount = 5000;
+ // Función para generar una tarjeta aleatoria
+const generateCard = () => {
+  const cardNumber = '5' + Math.floor(Math.random() * 1000000000000000).toString().padStart(15, '0');
+  const targetType = "credito";
 
-    return {
+  const month = Math.floor(Math.random() * 12 + 1).toString().padStart(2, '0');
+  const currentYear = new Date().getFullYear();
+  const year = Math.floor(Math.random() * 5 + currentYear + 1); // Genera un año desde el año actual + 1 a 5 años en el futuro
+  const expirationDate = `${year}-${month}-31`; // Formato completo YYYY-MM-DD
+
+  const securityCode = Math.floor(Math.random() * 900 + 100).toString();
+  const authorizedAmount = 5000;
+  const availableAmount = 5000;
+
+  return {
       cardNumber,
       name,
       targetType,
@@ -31,8 +36,9 @@ function Register() {
       securityCode,
       authorizedAmount,
       availableAmount,
-    };
   };
+};
+
 
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
@@ -192,7 +198,7 @@ function Register() {
               <div className="card-details">
                 <p>{}</p> {/* Espacio para que no aparezca texto hasta arriba de la imagen de la tarjeta */}
                 <p>{generatedCard.cardNumber}</p> {/* Muestra el número de tarjeta */}
-                <p>{generatedCard.expirationDate}</p> {/* Muestra la fecha de expiración */}
+                <p>{`${generatedCard.expirationDate.split('-')[0].slice(-2)}/${generatedCard.expirationDate.split('-')[1]}`}</p> {/* Muestra la fecha de expiración en formato 25/06 */}
                 <p>{generatedCard.name}</p> {/* Muestra el nombre del titular */}
               </div>
             </Card.Body>
@@ -210,8 +216,8 @@ function Register() {
           </Card>
         </div>
       )}
-    </div>
-  );
-}
+          </div>
+        );
+      }
 
 export default Register;
