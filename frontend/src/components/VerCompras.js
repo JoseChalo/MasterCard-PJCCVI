@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../stylesCSS/VerCompras.css';
 import Navbar from '../components/Navbar';
+import { gmailUser } from './gmailUserContext.js';
 
 const VerCompras = () => {
   const compras = [
     { id: 1, descripcion: 'Compra en Supermercado', monto: 200, fecha: '2024-09-15' },
     { id: 2, descripcion: 'Compra en Tienda Electrónica', monto: 450, fecha: '2024-09-18' }
   ];
+
+  const { gmail } = useContext(gmailUser);
 
   return (
     <div>
@@ -22,6 +25,7 @@ const VerCompras = () => {
             </li>
           ))}
         </ul>
+        <button onClick={ () => {alert("El gmial actual es: " + gmail);} }> Ver el gmail </button>
       </div>
     </div>
   );

@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../stylesCSS/Navbar.css';
 import LogoMasterCard from '../images/LogoMasterCard.avif';
 
+import { gmailUser } from './gmailUserContext.js';
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const { setGmailCurrent } = useContext(gmailUser);
 
   const handleLogout = () => {
     // Eliminar el token de sesión (o cualquier otro estado de autenticación)
     localStorage.removeItem('authToken');
 
     // Redirigir al usuario a la página de inicio de sesión y evitar que use el botón de atrás
+    setGmailCurrent('');
     navigate('/', { replace: true });
   };
 

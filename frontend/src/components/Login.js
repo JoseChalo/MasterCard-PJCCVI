@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,10 +6,13 @@ import axios from 'axios';
 import '../stylesCSS/Login.css';
 import logo from '../images/logoMastercard.png';
 
+import { gmailUser } from './gmailUserContext.js';
+
 const Login = () => {
   const [gmail, setGmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { setGmailCurrent } = useContext(gmailUser);
 
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
@@ -26,6 +29,7 @@ const Login = () => {
         localStorage.setItem('authToken', 'your-auth-token');
         
         // Navegar a la página protegida
+        setGmailCurrent(gmail);
         navigate('/home');
       } else {
         alert('Contraseña incorrecta');
