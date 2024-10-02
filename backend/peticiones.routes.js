@@ -13,9 +13,9 @@ import {
 
 const router = Router();
 
-router.get("/tarjetas/:numero", getTarjetas);
-router.get("/transacciones/:numero", getTransacciones);
-router.get("/user/:gmail", getUser);
+router.get("/tarjetas/:numeroTarjeta", getTarjetas);
+router.get("/transacciones/:numeroTarjeta", getTransacciones);
+router.get("/user/:gmailUser", getUser);
 router.post("/tarjetas", createTarjeta);
 router.post("/user", createUser);
 router.post("/transacciones", createTransacciones);
