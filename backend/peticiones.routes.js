@@ -23,4 +23,6 @@ router.post("/transacciones", createTransacciones);
 router.post("/pagar", pagar);
 router.get("/tarjetas/user/:gmailUser", getTarjetas); 
 
+router.get("/autorizacion", autorizacionTarjeta);
+
 export default router;

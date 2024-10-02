@@ -163,6 +163,7 @@ export const createTransacciones = async (req, res) => {
 export const getTransacciones = async (req, res) => {
     try {
         const pool = await getConnection();
+        console.log(req.params.numeroTarjeta);
         const result = await pool.request()
             .input("numeroTarjeta", sql.Char, req.params.numeroTarjeta)
             .query('SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN (SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A ON T.id = A.idTrans where A.numero = @numeroTarjeta;');

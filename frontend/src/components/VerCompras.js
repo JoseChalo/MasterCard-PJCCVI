@@ -1,15 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../stylesCSS/VerCompras.css';
 import Navbar from '../components/Navbar';
 import { gmailUser } from './gmailUserContext.js';
+import axios from 'axios';
 
 const VerCompras = () => {
-  const compras = [
+  const [compras, setCompras] = useState([
     { id: 1, descripcion: 'Compra en Supermercado', monto: 200, fecha: '2024-09-15' },
     { id: 2, descripcion: 'Compra en Tienda Electrónica', monto: 450, fecha: '2024-09-18' }
-  ];
-
+  ]);
+  
   const { gmail } = useContext(gmailUser);
+  const gmailBuscar = gmail;
+
+  useEffect(() => {
+    const fetchTarjetaData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/tarjetas/user/${gmailBuscar}`);
+        const userData = response.data[0];
+      } catch (error) {
+        alert('Error: No se encontró la tarjeta');
+      }
+    };
+
+    if (gmailBuscar) {
+      fetchTarjetaData();
+    }
+  }, [gmailBuscar]);  // Se ejecuta cuando `gmailBuscar` cambia
 
   return (
     <div>
@@ -25,7 +42,7 @@ const VerCompras = () => {
             </li>
           ))}
         </ul>
-        <button onClick={ () => {alert("El gmial actual es: " + gmail);} }> Ver el gmail </button>
+        <button onClick={() => { alert("El gmail actual es: " + gmail); }}> Ver el gmail </button>
       </div>
     </div>
   );

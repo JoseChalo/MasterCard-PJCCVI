@@ -72,5 +72,11 @@ SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN
 SELECT FORMAT(fecha_venc, 'yyyy-MM') AS fecha_venc
 FROM tarjetas;
 
+SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento
+FROM tarjetas T
+INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
+INNER JOIN users U ON U.gmail = CU.idUser
+WHERE U.gmail = 'josechalo2003@gmail.com';
+
 
 
