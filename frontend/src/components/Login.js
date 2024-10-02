@@ -27,7 +27,7 @@ const Login = () => {
         {/* Grupo para el campo de usuario */}
         <Form.Group className="mb-3 inline-form-group1" controlId="formBasicUser">
           <Form.Label>Usuario </Form.Label>
-          <Form.Control type="text" placeholder="Usuario Mastercard" />
+          <Form.Control type="text" placeholder="Correo electrónico" />
         </Form.Group>
 
         {/* Grupo para el campo de contraseña */}
