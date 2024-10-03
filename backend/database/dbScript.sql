@@ -1,7 +1,7 @@
 create database pjCCVI
 use pjCCVI;
 use master;
-DROP DATABASE pjCCVI;
+--DROP DATABASE pjCCVI;
 
 create table tarjetas (
 	numero char(16),
@@ -18,6 +18,7 @@ create table transacciones (
 	id int primary key IDENTITY(1,1),
 	monto numeric(14, 2),
 	proveniente VARCHAR(100),
+	fecha DATE,
 	tipo char(8) check (tipo in ('consumo', 'pago'))
 );
 
@@ -60,7 +61,6 @@ SELECT * FROM tarjetas;
 SELECT * FROM users;
 SELECT * FROM cardsUser;
 
-
 SELECT * FROM transacciones;
 SELECT * FROM trans_echas;
 SELECT * FROM tarjetas;
@@ -72,11 +72,8 @@ SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN
 SELECT FORMAT(fecha_venc, 'yyyy-MM') AS fecha_venc
 FROM tarjetas;
 
-SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento
+SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible AS monto
 FROM tarjetas T
 INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
 INNER JOIN users U ON U.gmail = CU.idUser
-WHERE U.gmail = 'josechalo2003@gmail.com';
-
-
-
+WHERE U.gmail = 'josechalo2003@gmail.com'

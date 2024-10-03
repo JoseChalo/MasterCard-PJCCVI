@@ -12,7 +12,7 @@ export const getTarjetas = async (req, res) => {
       const result = await pool.request()
         .input('gmailUser', sql.VarChar, gmailUser)
         .query(`
-          SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento
+          SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible
           FROM tarjetas T
           INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
           INNER JOIN users U ON U.gmail = CU.idUser
@@ -25,6 +25,7 @@ export const getTarjetas = async (req, res) => {
           nombre: tarjeta.nombre,
           ultimosDigitos: tarjeta.ultimosDigitos,
           fechaVencimiento: tarjeta.fechaVencimiento,
+          monto_disponible: tarjeta.monto_disponible
         }));
         res.json(tarjetas);
       } else {
@@ -163,10 +164,12 @@ export const createTransacciones = async (req, res) => {
 export const getTransacciones = async (req, res) => {
     try {
         const pool = await getConnection();
-        console.log(req.params.numeroTarjeta);
         const result = await pool.request()
             .input("numeroTarjeta", sql.Char, req.params.numeroTarjeta)
-            .query('SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN (SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A ON T.id = A.idTrans where A.numero = @numeroTarjeta;');
+            .query(`SELECT T.monto, T.tipo, T.id, T.proveniente, FORMAT( fecha, 'yyyy-MM-dd') AS fecha
+                from transacciones T INNER JOIN 
+                (SELECT * from trans_echas E INNER JOIN  tarjetas C ON E.numeroTarjeta = C.numero) A 
+                ON T.id = A.idTrans where A.numero = @numeroTarjeta;`);
         res.json(result.recordset);
     } catch (error) {
         console.error('Error al conseguir transacciones de la tarjeta: ', error);
@@ -211,6 +214,9 @@ export const autorizacionTarjeta = async (req, res) => {
             });
         }
 
+        const hoy = new Date();
+        const fechaISO = hoy.toISOString().split('T')[0];
+
         const resultCambioMonto = await pool.request()
             .input("numero", sql.Char, tarjeta)
             .input("monto", sql.Numeric, monto)
@@ -218,7 +224,8 @@ export const autorizacionTarjeta = async (req, res) => {
         const insertTransacciones = await pool.request()
             .input("monto", sql.Numeric, monto)
             .input("proveniente", sql.VarChar, tienda)
-            .query("INSERT INTO transacciones (monto, proveniente, tipo) VALUES (@monto, @proveniente, 'consumo'); SELECT SCOPE_IDENTITY() AS id;");
+            .input("fecha", sql.Date, fechaISO)
+            .query("INSERT INTO transacciones (monto, proveniente, tipo, fecha) VALUES (@monto, @proveniente, 'consumo', @fecha); SELECT SCOPE_IDENTITY() AS id;");
         const insertTrans_echas = await pool.request()
             .input("numero", sql.Char, tarjeta)
             .input("idTrans", sql.Int, insertTransacciones.recordset[0].id)
@@ -257,13 +264,16 @@ export const autorizacionTarjeta = async (req, res) => {
 export const pagar = async (req, res) => {
     try {
         const pool = await getConnection();
+        const hoy = new Date();
+        const fechaISO = hoy.toISOString().split('T')[0];
         const aumentarMonto = await pool.request()
             .input("numero", sql.Char, req.body.numero)
             .input("monto", sql.Numeric, req.body.monto)
             .query('UPDATE tarjetas SET monto_disponible = monto_disponible + @monto WHERE numero = @numero;');
         const insertTransacciones = await pool.request()
             .input("monto", sql.Numeric, req.body.monto)
-            .query("INSERT INTO transacciones (monto, proveniente, tipo) VALUES (@monto, 'Pago', 'pago'); SELECT SCOPE_IDENTITY() AS id;");
+            .input("fecha", sql.Date, fechaISO)
+            .query("INSERT INTO transacciones (monto, proveniente, tipo, fecha) VALUES (@monto, 'Banco', 'pago', @fecha); SELECT SCOPE_IDENTITY() AS id;");
         const insertTrans_echas = await pool.request()
             .input("numero", sql.Char, req.body.numero)
             .input("idTrans", sql.Int, insertTransacciones.recordset[0].id)
