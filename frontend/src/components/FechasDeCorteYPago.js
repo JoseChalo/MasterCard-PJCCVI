@@ -8,11 +8,15 @@ const FechasDeCorteYPago = () => {
 
   return (
     <div>
-      <Navbar /> {/* Coloca el Navbar fuera del contenido principal */}
+      <Navbar />
       <div className="fechas-container">
-        <h1>Sus Fechas de Corte y Pago Son:</h1>
-        <p><strong>Fecha de corte:</strong> {fechaCorte}</p>
-        <p><strong>Fecha de pago:</strong> {fechaPago}</p>
+        <h2 className='title'>Fechas de Corte y Pago:</h2>
+        <div className="fecha-item">
+          <p><strong>Fecha de corte:</strong> {fechaCorte}</p>
+        </div>
+        <div className="fecha-item">
+          <p><strong>Fecha de pago:</strong> {fechaPago}</p>
+        </div>
       </div>
     </div>
   );

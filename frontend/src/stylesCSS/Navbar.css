@@ -1,42 +1,45 @@
-/* Estilos globales */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Public Sans', 'Noto Sans', sans-serif;
+.navbar {
+  background-color: #111;
+  padding: 10px 0;
+  border-bottom: 2px solid #ff5900;
 }
 
-.navbar {
+.navbar-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 40px;
-  background-color: #1a0d0e; /* Color oscuro del navbar */
-  border-bottom: 1px solid #39282c; /* Línea separadora */
-  z-index: 1000;
+  margin: 0 auto;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
 }
 
 .navbar-brand a {
   color: white;
-  font-size: 2.25rem; /* Tamaño de texto del logo */
+  font-size: 2.1rem;
   font-weight: 700;
   text-decoration: none;
-  margin-left: 20px;
-  /*margin-top: 20px; */
+  margin-right: 10px;
+}
+
+.navbar-brand a:hover {
+  color: #f69f14;
 }
 
 .navbar-logo {
-  width: 50px; /* Ajusta el ancho de la imagen */
-  height: auto; /* Mantiene la proporción de la imagen */
-  margin-left: 10px; /* Espacio entre el texto y la imagen */
-  vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
-  margin-bottom: 10px;
+  width: 50px; /* Tamaño ajustado del logo */
+  height: auto;
+  vertical-align: middle;
 }
-
 
 .navbar-links {
   display: flex;
-  gap: 24px; /* Espacio entre los enlaces */
+  gap: 30px; /* Espacio entre los enlaces */
   list-style: none;
+  align-items: center; /* Asegura que los enlaces estén alineados verticalmente */
+  margin-top: 18px;
+  margin-left: -25px;
 }
 
 .navbar-links li {
@@ -45,57 +48,33 @@ body {
 
 .navbar-links a {
   color: white;
-  font-size: 1.225rem; /* Tamaño de texto de los links */
+  font-size: 1.2rem;
   font-weight: 500;
   text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #f69f14;
 }
 
 .navbar-logout {
   display: flex;
   align-items: center;
-  gap: 12px;
+  margin-left: 20px;
 }
 
 .navbar-logout button {
-  background-color: #39282c; /* Botón oscuro */
+  background-color: #ff5900;
   color: white;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 700;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px 20px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-  margin-right: 20px;
 }
 
 .navbar-logout button:hover {
-  background-color: #db143c; /* Cambio de color al hacer hover */
-}
-
-.navbar-search {
-  display: none; /* Ocultar el campo de búsqueda para reflejar la imagen proporcionada */
-}
-
-.navbar a:hover {
-  color: #db143c; /* Color rojo en hover */
-}
-
-/* Estilo de la imagen de perfil */
-.navbar-profile {
-  width: 40px;
-  height: 40px;
-  background-color: #ccc;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-}
-
-.navbar-icons {
-  display: flex;
-  gap: 16px; /* Espacio entre los iconos */
-}
-
-.navbar-icons img {
-  width: 24px; /* Tamaño de los iconos */
-  cursor: pointer;
+  background-color: #f69f14;
 }

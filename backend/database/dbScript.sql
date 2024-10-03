@@ -72,8 +72,12 @@ SELECT T.monto, T.tipo, T.id from transacciones T INNER JOIN
 SELECT FORMAT(fecha_venc, 'yyyy-MM') AS fecha_venc
 FROM tarjetas;
 
-SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible AS monto
+SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible AS monto, monto_autorizado
 FROM tarjetas T
 INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
 INNER JOIN users U ON U.gmail = CU.idUser
-WHERE U.gmail = 'josechalo2003@gmail.com'
+WHERE U.gmail = 'josechalo2003@gmail.com';
+
+
+UPDATE tarjetas SET monto_disponible = 2299.00 where numero = 1234567812345678;
+

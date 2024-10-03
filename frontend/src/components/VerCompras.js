@@ -76,8 +76,8 @@ const VerCompras = () => {
         </ul>
         <Container>
           <Row>
-            <Col>Consumos realizados: { totalConsumos }</Col>
-            <Col>Monto disponible: { montoActual }</Col>
+            <Col>Consumos realizados: Q{ totalConsumos }</Col>
+            <Col>Monto disponible: Q{ montoActual }</Col>
           </Row>
         </Container>
       </div>

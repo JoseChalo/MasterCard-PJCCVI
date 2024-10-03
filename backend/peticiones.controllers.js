@@ -12,7 +12,7 @@ export const getTarjetas = async (req, res) => {
       const result = await pool.request()
         .input('gmailUser', sql.VarChar, gmailUser)
         .query(`
-          SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible
+          SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible, T.monto_autorizado
           FROM tarjetas T
           INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
           INNER JOIN users U ON U.gmail = CU.idUser
@@ -25,7 +25,8 @@ export const getTarjetas = async (req, res) => {
           nombre: tarjeta.nombre,
           ultimosDigitos: tarjeta.ultimosDigitos,
           fechaVencimiento: tarjeta.fechaVencimiento,
-          monto_disponible: tarjeta.monto_disponible
+          monto_disponible: tarjeta.monto_disponible,
+          monto_autorizado: tarjeta.monto_autorizado
         }));
         res.json(tarjetas);
       } else {
@@ -214,6 +215,8 @@ export const autorizacionTarjeta = async (req, res) => {
             });
         }
 
+        console.log(req.query.monto);
+
         const hoy = new Date();
         const fechaISO = hoy.toISOString().split('T')[0];
 
@@ -237,9 +240,9 @@ export const autorizacionTarjeta = async (req, res) => {
             return res.json({
                 "autorización": {
                     "emisor": "MasterCard",
-                    "tarjeta": tarjetaInfo.titular.trim(),
+                    "tarjeta": tarjetaInfo.numero.trim(),
                     "status": 1,
-                    "numero": tarjetaInfo.numero.trim()
+                    "numero": insertTransacciones.recordset[0].id
                 }
             });
         } else if (formato == 'xml') {
@@ -247,9 +250,9 @@ export const autorizacionTarjeta = async (req, res) => {
             const xmlResponse = `
                 <autorizacion>
                     <emisor>MasterCard</emisor>
-                    <tarjeta>${tarjetaInfo.titular.trim()}</tarjeta>
+                    <tarjeta>${tarjetaInfo.numero.trim()}</tarjeta>
                     <status>1</status>
-                    <numero>${tarjetaInfo.numero.trim()}</numero>
+                    <numero>${insertTransacciones.recordset[0].id}</numero>
                 </autorizacion>
             `;
             res.set('Content-Type', 'application/xml');
@@ -266,6 +269,17 @@ export const pagar = async (req, res) => {
         const pool = await getConnection();
         const hoy = new Date();
         const fechaISO = hoy.toISOString().split('T')[0];
+
+        const tarjeta = await pool.request()
+        .input("numero", sql.Char, req.body.numero)
+        .query('SELECT * FROM tarjetas WHERE numero = @numero');
+
+        if(tarjeta.recordset[0].monto_autorizado <= (tarjeta.recordset[0].monto_disponible + req.body.monto)){
+            return res.json({
+                Mensaje: 'No se pudo realizar el pago. El monto ingresado sobrepasa al monto autorizado'
+            });
+        }
+
         const aumentarMonto = await pool.request()
             .input("numero", sql.Char, req.body.numero)
             .input("monto", sql.Numeric, req.body.monto)
@@ -281,7 +295,7 @@ export const pagar = async (req, res) => {
 
         console.log('Tarjeta Pagada');
         res.json({
-            Mensaje: 'Tarjeta Pagada',
+            Mensaje: 'Tarjeta Pagada'
         });
     } catch (error) {
         console.error('Error al realizar el pago: ', error);

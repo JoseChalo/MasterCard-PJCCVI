@@ -21,8 +21,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <Navbar />
-      <h1>Bienvenido a la Página Principal</h1>
+      <Navbar />  
       <ControlledCarousel />
       {}
     </div>

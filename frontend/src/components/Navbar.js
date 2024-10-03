@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../stylesCSS/Navbar.css';
-import LogoMasterCard from '../images/LogoMasterCard.avif';
+import LogoMasterCard from '../images/logoMastercard.png';
 
 import { gmailUser } from './gmailUserContext.js';
 
@@ -20,26 +20,25 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">
-        <Link to="/home">Mastercard</Link>
-        <img src={LogoMasterCard} alt="Mastercard Logo" className="navbar-logo" />
-      </div>
-      <ul className="navbar-links">
-        <li><Link to="/pagar">Pagar</Link></li>
-        <li><Link to="/compras">Ver Compras</Link></li>
-        <li><Link to="/fechas">Fechas de Corte y Pago</Link></li>
-        <li><Link to="/tarjetas">Tarjetas</Link></li> 
-      </ul>
-      <div className="navbar-search">
-        <input type="text" placeholder="Buscar..." />
-        <button>Buscar</button>
-      </div>
-      <div className="navbar-logout">
-        <button onClick={handleLogout}>
-          Cerrar Sesión
-        </button>
+      <div className="navbar-container">
+        <div className="navbar-brand">
+          <Link to="/home">Mastercard</Link>
+          <img src={LogoMasterCard} alt="Mastercard Logo" className="navbar-logo" />
+        </div>
+        <ul className="navbar-links">
+          <li><Link to="/pagar">Pagar</Link></li>
+          <li><Link to="/compras">Ver Compras</Link></li>
+          <li><Link to="/fechas">Fechas de Corte</Link></li>
+          <li><Link to="/tarjetas">Tarjetas</Link></li> 
+        </ul>
+        <div className="navbar-logout">
+          <button onClick={handleLogout}>
+            Cerrar Sesión
+          </button>
+        </div>
       </div>
     </nav>
+
   );
 };
 

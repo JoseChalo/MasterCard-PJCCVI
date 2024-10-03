@@ -1,7 +1,7 @@
 /* src/components/VerCompras.css */
 
 .compras-container {
-    background-color: #2b1617;
+    background-color: #111;
     padding: 40px;
     border-radius: 10px;
     width: 80%;
@@ -23,7 +23,7 @@
   }
   
   .compra-item {
-    background-color: #1a0c0d;
+    background-color: #111;
     padding: 15px 20px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -38,7 +38,7 @@
   }
   
   .compra-monto {
-    color: #ff7d50;
+    color: #ff5900;
     font-weight: 700;
   }
   
