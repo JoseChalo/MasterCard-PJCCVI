@@ -118,8 +118,8 @@ const Pagar = () => {
             <h3 className="title">Datos de tarjeta</h3>
             <Container>
               <Row>
-                <Col>Monto disponible: Q{montoD}</Col>
-                <Col>Monto autorizado: Q{montoA}</Col>
+                <Col>Monto disponible: Q{montoD.toFixed(2)}</Col>
+                <Col>Monto autorizado: Q{montoA.toFixed(2)}</Col>
               </Row>
             </Container>
           </div>

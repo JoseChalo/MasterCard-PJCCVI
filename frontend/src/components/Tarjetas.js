@@ -41,26 +41,30 @@ function Tarjetas() {
             alt="Descripción de la tarjeta"
           />
         </div>
-        <h2 className="title">Tus Tarjetas</h2>
-        {tarjetas.length > 0 ? (
-          <Accordion>
-            {tarjetas.map((tarjeta, index) => (
-              <Accordion.Item eventKey={index.toString()} key={index}>
-                <Accordion.Header>
-                  Tarjeta {tarjeta.ultimosDigitos} - {tarjeta.nombre}
-                </Accordion.Header>
-                <Accordion.Body>
-                  <p>Fecha de Vencimiento: {tarjeta.fechaVencimiento}</p>
-                  <p>Nombre: {tarjeta.nombre}</p>
-                  <p>Numeración de la tarjeta: {tarjeta.ultimosDigitos}</p>
-                  <Link to="/compras" className="details-link">Ver más detalles</Link>
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
-          </Accordion>
-        ) : (
-          <p>No tienes tarjetas registradas. Por favor, registra una tarjeta.</p>
-        )}
+        <div>
+          <h2 className="title">Tus Tarjetas</h2>
+          {tarjetas.length > 0 ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Accordion style={{ width: '100%', maxWidth: '600px' }}>
+                {tarjetas.map((tarjeta, index) => (
+                  <Accordion.Item eventKey={index.toString()} key={index}>
+                    <Accordion.Header>
+                      Tarjeta {tarjeta.ultimosDigitos} - {tarjeta.nombre}
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <p>Fecha de Vencimiento: {tarjeta.fechaVencimiento}</p>
+                      <p>Nombre: {tarjeta.nombre}</p>
+                      <p>Numeración de la tarjeta: {tarjeta.numero}</p>
+                      <Link to="/compras" className="details-link">Ver más detalles</Link>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                ))}
+              </Accordion>
+            </div>
+          ) : (
+            <p>No tienes tarjetas registradas. Por favor, registra una tarjeta.</p>
+          )}          
+        </div>
       </div>
     </div>
   );

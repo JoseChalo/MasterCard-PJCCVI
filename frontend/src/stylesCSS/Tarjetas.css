@@ -1,13 +1,19 @@
 .tarjetas-container {
   padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
 }
+
+.centered-container {
+  align-items: center; /* Alinea los elementos horizontalmente en el centro */
+  justify-content: center; /* Alinea los elementos verticalmente en el centro, si es necesario */
+  margin-top: 20px; /* Espaciado superior si es necesario */
+}
+
 
 .gif-container {
   display: flex;
   justify-content: center;
   margin-bottom: 20px; /* Espacio entre el GIF y el contenido */
+  margin-top: 20px;
 }
 
 .gif-image {
@@ -28,9 +34,7 @@
   margin-bottom: 10px; /* Espacio entre los items */
 }
 
-.accordion-header {
-  background-color: #333; /* Fondo del encabezado del acordeón */
-}
+
 
 .accordion-button {
   background-color: #333; /* Fondo del botón del acordeón */
@@ -46,7 +50,7 @@
 .accordion-body {
   background-color: #222; /* Fondo del cuerpo del acordeón */
   border: none; /* Sin borde */
-  color:#fff;
+  color:#ffffff;
 }
 
 .loading-text {

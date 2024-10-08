@@ -15,69 +15,74 @@ const VerCompras = () => {
   const { gmail } = useContext(gmailUser);
   const gmailBuscar = gmail;
 
-  useEffect(() => {
-    const fetchTarjetaData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/tarjetas/user/${gmailBuscar}`);
-        const ultimosDigitos = response.data[0].ultimosDigitos;
-        setMontoActual(response.data[0].monto_disponible);
-  
-        const transaccionesResponse = await axios.get(`http://localhost:3001/transacciones/${ultimosDigitos}`);
-        const transacciones = transaccionesResponse.data;
-  
-        setCompras([]); 
-        let sumaTotalConsumos = 0;
-  
-        transacciones.forEach((transaccion, posicion) => {  
-          setCompras(prevCompras => [
-            ...prevCompras,
-            {
-              numero: `Transacción ${posicion + 1}: `,
-              tipo: transaccion.tipo || 'Sin tipo',
-              proveniente: transaccion.proveniente || 'Sin proveniente',
-              monto: transaccion.monto || 'Sin monto',
-              fecha: transaccion.fecha || 'Fecha no disponible'
-            }
-          ]);
+  const fetchTarjetaData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/tarjetas/user/${gmailBuscar}`);
+      const ultimosDigitos = response.data[0].numero;
+      setMontoActual(response.data[0].monto_disponible);
 
-          if(transaccion.tipo.trim() === 'consumo') {
-            sumaTotalConsumos += transaccion.monto
+      const transaccionesResponse = await axios.get(`http://localhost:3001/transacciones/${ultimosDigitos}`);
+      const transacciones = transaccionesResponse.data;
+
+      setCompras([]); 
+      let sumaTotalConsumos = 0;
+
+      transacciones.forEach((transaccion, posicion) => {  
+        setCompras(prevCompras => [
+          ...prevCompras,
+          {
+            numero: `Transacción ${posicion + 1}: `,
+            tipo: transaccion.tipo || 'Sin tipo',
+            proveniente: transaccion.proveniente || 'Sin proveniente',
+            monto: transaccion.monto || 'Sin monto',
+            fecha: transaccion.fecha || 'Fecha no disponible'
           }
-        });
+        ]);
 
-        setTotalConsumos(sumaTotalConsumos);
-        
-      } catch (error) {
-        alert('Error: No se encontró la tarjeta o hubo un problema con las transacciones');
-      }
-    };
-  
+        if (transaccion.tipo.trim() === 'consumo') {
+          sumaTotalConsumos += transaccion.monto;
+        }
+      });
+
+      setTotalConsumos(sumaTotalConsumos);
+      
+    } catch (error) {
+      alert('Error: No se encontró la tarjeta o hubo un problema con las transacciones');
+    }
+  };
+
+  useEffect(() => {
     if (gmailBuscar) {
       fetchTarjetaData();
+
+      const intervalId = setInterval(() => {
+        fetchTarjetaData();
+      }, 5000);
+
+      return () => clearInterval(intervalId);
     }
   }, [gmailBuscar]);
-  
-  
+
   return (
     <div>
       <Navbar />
       <div className="compras-container">
         <h2 className="compras-title">Compras Realizadas</h2>
         <ul className="compras-list">
-          {compras.map((compra) => (
-            <li key={compra.id} className="compra-item">
+          {compras.map((compra, index) => (
+            <li key={index} className="compra-item">
               <span className="compra-numero">{compra.numero}</span>
               <span className="compra-tipo">{compra.tipo}</span>
               <span className="compra-proveniente">{compra.proveniente}</span> 
-              <span className="compra-monto">Q{compra.monto}</span>
+              <span className="compra-monto">Q{(compra.monto).toFixed(2)}</span>
               <span className="compra-fecha">{compra.fecha}</span>
             </li>
           ))}
         </ul>
         <Container>
           <Row>
-            <Col>Consumos realizados: Q{ totalConsumos }</Col>
-            <Col>Monto disponible: Q{ montoActual }</Col>
+            <Col>Consumos realizados: Q{totalConsumos.toFixed(2)}</Col>
+            <Col>Monto disponible: Q{montoActual.toFixed(2)}</Col>
           </Row>
         </Container>
       </div>
@@ -86,3 +91,4 @@ const VerCompras = () => {
 };
 
 export default VerCompras;
+

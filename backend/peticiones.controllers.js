@@ -12,7 +12,9 @@ export const getTarjetas = async (req, res) => {
       const result = await pool.request()
         .input('gmailUser', sql.VarChar, gmailUser)
         .query(`
-          SELECT T.titular AS nombre, T.numero AS ultimosDigitos, FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, T.monto_disponible, T.monto_autorizado
+          SELECT T.titular AS nombre, RIGHT(T.numero, 4) AS ultimosDigitos, 
+          FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, 
+          T.monto_disponible, T.monto_autorizado, T.numero
           FROM tarjetas T
           INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
           INNER JOIN users U ON U.gmail = CU.idUser
@@ -26,7 +28,8 @@ export const getTarjetas = async (req, res) => {
           ultimosDigitos: tarjeta.ultimosDigitos,
           fechaVencimiento: tarjeta.fechaVencimiento,
           monto_disponible: tarjeta.monto_disponible,
-          monto_autorizado: tarjeta.monto_autorizado
+          monto_autorizado: tarjeta.monto_autorizado,
+          numero: tarjeta.numero
         }));
         res.json(tarjetas);
       } else {
@@ -75,8 +78,8 @@ export const createUser = async (req, res) => {
             .input("tipo", sql.Char, req.body.tipo)
             .input("fecha_venc", sql.Date, req.body.fecha_venc)
             .input("num_seguridad", sql.Char, req.body.num_seguridad)
-            .input("monto_autorizado", sql.Numeric, req.body.monto_autorizado)
-            .input("monto_disponible", sql.Numeric, req.body.monto_disponible)
+            .input("monto_autorizado", sql.Decimal(14, 2), parseFloat(req.body.monto_autorizado).toFixed(2))
+            .input("monto_disponible", sql.Decimal(14, 2), parseFloat(req.body.monto_disponible).toFixed(2))
             .query('INSERT INTO tarjetas (numero, titular, tipo, fecha_venc, num_seguridad, monto_autorizado, monto_disponible) VALUES (@numero, @titular, @tipo, @fecha_venc, @num_seguridad, @monto_autorizado, @monto_disponible)');
 
         // Asociar la tarjeta con el usuario
@@ -126,8 +129,8 @@ export const createTarjeta = async (req, res) => {
             .input("tipo", sql.Char, req.body.tipo)
             .input("fecha_venc", sql.Date, req.body.fecha_venc)
             .input("num_seguridad", sql.Char, req.body.num_seguridad)
-            .input("monto_autorizado", sql.Numeric, req.body.monto_autorizado)
-            .input("monto_disponible", sql.Numeric, req.body.monto_disponible)
+            .input("monto_autorizado", sql.Decimal(14, 2), parseFloat(req.body.monto_autorizado).toFixed(2))
+            .input("monto_disponible", sql.Decimal(14, 2), parseFloat(req.body.monto_disponible).toFixed(2))
             .query('INSERT INTO tarjetas (numero, titular, tipo, fecha_venc, num_seguridad, monto_autorizado, monto_disponible) VALUES (@numero, @titular, @tipo, @fecha_venc, @num_seguridad, @monto_autorizado, @monto_disponible)');
         res.json({
             tarjetaId: result.recordset[0]
@@ -143,7 +146,7 @@ export const createTransacciones = async (req, res) => {
     try {
         const pool = await getConnection();
         const resultTransaccion = await pool.request()
-            .input("monto", sql.Numeric, req.body.numero)
+            .input("monto", sql.Decimal(14, 2), parseFloat(req.body.numero).toFixed(2))
             .input("tipo", sql.Char, req.body.titular)
             .query('INSERT INTO transacciones (monto, tipo) VALUES (@monto, @tipo)');
 
@@ -219,13 +222,14 @@ export const autorizacionTarjeta = async (req, res) => {
 
         const hoy = new Date();
         const fechaISO = hoy.toISOString().split('T')[0];
+        const montoRecibido = parseFloat(req.query.monto).toFixed(2);
 
         const resultCambioMonto = await pool.request()
             .input("numero", sql.Char, tarjeta)
-            .input("monto", sql.Numeric, monto)
-            .query('UPDATE tarjetas SET monto_disponible = monto_disponible - @monto WHERE numero = @numero;');
+            .input("monto", sql.Decimal(14, 2), montoRecibido)
+            .query('UPDATE tarjetas SET monto_disponible = CAST(monto_disponible AS DECIMAL(14, 2)) - CAST(@monto AS DECIMAL(14, 2)) WHERE numero = @numero;');
         const insertTransacciones = await pool.request()
-            .input("monto", sql.Numeric, monto)
+            .input("monto", sql.Decimal(14, 2), monto)
             .input("proveniente", sql.VarChar, tienda)
             .input("fecha", sql.Date, fechaISO)
             .query("INSERT INTO transacciones (monto, proveniente, tipo, fecha) VALUES (@monto, @proveniente, 'consumo', @fecha); SELECT SCOPE_IDENTITY() AS id;");
@@ -274,7 +278,7 @@ export const pagar = async (req, res) => {
         .input("numero", sql.Char, req.body.numero)
         .query('SELECT * FROM tarjetas WHERE numero = @numero');
 
-        if(tarjeta.recordset[0].monto_autorizado <= (tarjeta.recordset[0].monto_disponible + req.body.monto)){
+        if(tarjeta.recordset[0].monto_autorizado < (tarjeta.recordset[0].monto_disponible + req.body.monto)){
             return res.json({
                 Mensaje: 'No se pudo realizar el pago. El monto ingresado sobrepasa al monto autorizado'
             });
@@ -282,10 +286,10 @@ export const pagar = async (req, res) => {
 
         const aumentarMonto = await pool.request()
             .input("numero", sql.Char, req.body.numero)
-            .input("monto", sql.Numeric, req.body.monto)
+            .input("monto", sql.Decimal(14, 2), parseFloat(req.body.monto).toFixed(2))
             .query('UPDATE tarjetas SET monto_disponible = monto_disponible + @monto WHERE numero = @numero;');
         const insertTransacciones = await pool.request()
-            .input("monto", sql.Numeric, req.body.monto)
+            .input("monto", sql.Decimal(14, 2), parseFloat(req.body.monto).toFixed(2))
             .input("fecha", sql.Date, fechaISO)
             .query("INSERT INTO transacciones (monto, proveniente, tipo, fecha) VALUES (@monto, 'Banco', 'pago', @fecha); SELECT SCOPE_IDENTITY() AS id;");
         const insertTrans_echas = await pool.request()

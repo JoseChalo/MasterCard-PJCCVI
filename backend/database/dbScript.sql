@@ -9,14 +9,14 @@ create table tarjetas (
 	tipo char(8) check (tipo in ('credito', 'debito')),
 	fecha_venc date,
 	num_seguridad char(3),
-	monto_autorizado numeric(14, 2),
-	monto_disponible numeric(14, 2),
+	monto_autorizado DECIMAL(14, 2),
+	monto_disponible DECIMAL(14, 2),
 	Primary key (numero)
 );
 
 create table transacciones (
 	id int primary key IDENTITY(1,1),
-	monto numeric(14, 2),
+	monto DECIMAL(14, 2),
 	proveniente VARCHAR(100),
 	fecha DATE,
 	tipo char(8) check (tipo in ('consumo', 'pago'))
@@ -48,7 +48,7 @@ create table cardsUser (
 -- Insertar datos de ejemplo en la tabla tarjetas
 
 INSERT INTO tarjetas VALUES 
-('1234567812345678', 'Jose Chalo', 'credito', '2025-12-01', '123', 5000.00, 2500.00);
+('1234567812345678', 'Jose Chalo', 'credito', '2025-12-01', '123', 5000.00, 5000.00);
 
 INSERT INTO users VALUES ('josechalo2003@gmail.com', 'chalo', 'Jose Chalo');
 
@@ -81,3 +81,12 @@ WHERE U.gmail = 'josechalo2003@gmail.com';
 
 UPDATE tarjetas SET monto_disponible = 2299.00 where numero = 1234567812345678;
 
+
+
+SELECT T.titular AS nombre, RIGHT(T.numero, 4) AS ultimosDigitos, 
+FORMAT(T.fecha_venc, 'yyyy-MM') AS fechaVencimiento, 
+T.monto_disponible, T.monto_autorizado, T.numero
+FROM tarjetas T
+INNER JOIN cardsUser CU ON T.numero = CU.numeroTarjeta
+INNER JOIN users U ON U.gmail = CU.idUser
+WHERE U.gmail = 'josechalo2003@gmail.com';
