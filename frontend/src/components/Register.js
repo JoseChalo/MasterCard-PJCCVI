@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import '../stylesCSS/Register.css';
+import ipConfig from '../ipConfig.js';
 
 // Definir el componente Register
 function Register() {
@@ -67,7 +68,7 @@ const generateCard = () => {
     while (true) {
       try {
         // Realizar la petición POST al backend
-        const response = await fetch('http://localhost:3001/user', {
+        const response = await fetch(`${ipConfig.API_BASE_URL}/user`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

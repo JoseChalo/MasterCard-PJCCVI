@@ -192,33 +192,62 @@ export const autorizacionTarjeta = async (req, res) => {
             tienda,
             formato
         } = req.query;
+
+        // Normalizar la fecha para tener siempre el formato 'YYYY-MM'
+        const normalizarFecha = (fecha) => {
+            // Verifica si la fecha está en formato 'yyyyMM'
+            const regexYYYYMM = /^\d{4}(0[1-9]|1[0-2])$/;
+            if (regexYYYYMM.test(fecha)) {
+                return `${fecha.slice(0, 4)}-${fecha.slice(4, 6)}`;
+            }
+        
+            // Intenta parsear la fecha normal
+            const partes = fecha.split('-'); // Divide la fecha en año y mes
+            const year = parseInt(partes[0], 10);
+            const month = parseInt(partes[1], 10) - 1; // Resta 1 al mes
+        
+            // Crea un nuevo objeto Date con año y mes ajustados
+            const parsedDate = new Date(year, month);
+            if (isNaN(parsedDate.getTime())) {
+                return null; // Si la fecha no es válida, retorna null
+            }
+        
+            return `${year}-${('0' + (parsedDate.getMonth() + 1)).slice(-2)}`; // Devuelve en formato 'YYYY-MM'
+        };
+        
+
+        const fecha_venc_normalizada = normalizarFecha(fecha_venc);
+        if (!fecha_venc_normalizada) {
+            console.log('Fecha inválida');
+            return res.status(400).json({ error: "Fecha inválida" });
+        }
+
         const pool = await getConnection();
         const result = await pool.request()
             .input("numero", sql.Char, tarjeta)
             .query('SELECT * FROM tarjetas WHERE numero = @numero;');
+        
         const fechaFormat = await pool.request()
             .input("numero", sql.Char, tarjeta)
             .query("SELECT FORMAT(fecha_venc, 'yyyy-MM') AS fecha_venc FROM tarjetas WHERE numero = @numero;");
-
+        
         const tarjetaInfo = result.recordset[0];
 
         if ((result.recordset.length <= 0) ||
             (nombre.trim() !== tarjetaInfo.titular.trim()) ||
-            (fecha_venc >= fechaFormat.recordset[0].fecha_venc) ||
+            (fecha_venc_normalizada !== fechaFormat.recordset[0].fecha_venc) ||
             (num_seguridad.trim() !== tarjetaInfo.num_seguridad.trim()) ||
             (monto > tarjetaInfo.monto_disponible)) {
-            console.log('Parametros incorrectos.');
+            console.log('Transacción rechazada.');
             return res.json({
                 "autorización": {
                     "emisor": "MasterCard",
-                    "tarjeta": nombre,
+                    "tarjeta": tarjetaInfo.numero.trim(),
                     "status": 0,
-                    "numero": tarjeta
+                    "numero": 0
                 }
             });
         }
-
-        console.log(req.query.monto);
 
         const hoy = new Date();
         const fechaISO = hoy.toISOString().split('T')[0];
@@ -228,19 +257,20 @@ export const autorizacionTarjeta = async (req, res) => {
             .input("numero", sql.Char, tarjeta)
             .input("monto", sql.Decimal(14, 2), montoRecibido)
             .query('UPDATE tarjetas SET monto_disponible = CAST(monto_disponible AS DECIMAL(14, 2)) - CAST(@monto AS DECIMAL(14, 2)) WHERE numero = @numero;');
+
         const insertTransacciones = await pool.request()
             .input("monto", sql.Decimal(14, 2), monto)
             .input("proveniente", sql.VarChar, tienda)
             .input("fecha", sql.Date, fechaISO)
             .query("INSERT INTO transacciones (monto, proveniente, tipo, fecha) VALUES (@monto, @proveniente, 'consumo', @fecha); SELECT SCOPE_IDENTITY() AS id;");
+
         const insertTrans_echas = await pool.request()
             .input("numero", sql.Char, tarjeta)
             .input("idTrans", sql.Int, insertTransacciones.recordset[0].id)
             .query('INSERT INTO trans_echas (numeroTarjeta, idTrans) VALUES (@numero, @idTrans);');
-        
 
         if (formato == 'json') {
-            console.log("Pago echo exitosamente. ");
+            console.log("Pago realizado exitosamente.");
             return res.json({
                 "autorización": {
                     "emisor": "MasterCard",
@@ -250,7 +280,7 @@ export const autorizacionTarjeta = async (req, res) => {
                 }
             });
         } else if (formato == 'xml') {
-            console.log("Pago echo exitosamente. ");
+            console.log("Pago realizado exitosamente.");
             const xmlResponse = `
                 <autorizacion>
                     <emisor>MasterCard</emisor>
@@ -267,6 +297,7 @@ export const autorizacionTarjeta = async (req, res) => {
         return res.status(500).send("Error en la autorización de tarjeta.");
     }
 };
+
 
 export const pagar = async (req, res) => {
     try {

@@ -4,9 +4,9 @@ import '../stylesCSS/Pagar.css';
 import Navbar from '../components/Navbar';
 import { gmailUser } from './gmailUserContext.js';
 import axios from 'axios';
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ipConfig from '../ipConfig.js';
 
 const Pagar = () => {
   const [monto, setMonto] = useState(''); // Monto a pagar
@@ -19,7 +19,7 @@ const Pagar = () => {
 
   const fetchTarjetaData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/tarjetas/user/${gmailBuscar}`);
+      const response = await axios.get(`${ipConfig.API_BASE_URL}/tarjetas/user/${gmailBuscar}`);
       setMontoD(response.data[0].monto_disponible);
       setMontoA(response.data[0].monto_autorizado);
     } catch (error) {
@@ -44,7 +44,7 @@ const Pagar = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/pagar', {
+      const response = await fetch(`${ipConfig.API_BASE_URL}/pagar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

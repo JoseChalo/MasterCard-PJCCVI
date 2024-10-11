@@ -5,8 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../stylesCSS/Login.css';
 import logo from '../images/logoMastercard.png';
-
 import { gmailUser } from './gmailUserContext.js';
+import ipConfig from '../ipConfig.js';
 
 const Login = () => {
   const [gmail, setGmail] = useState('');
@@ -19,15 +19,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.get(`http://localhost:3001/user/${gmail}`);
+      const response = await axios.get(`${ipConfig.API_BASE_URL}/user/${gmail}`); // Usa la URL de configuración
       const userData = response.data[0];
-      
+
       if (userData && userData.contra === password) {
         console.log('Inicio de sesión exitoso');
-        
+
         // Almacenar el token de autenticación en localStorage
         localStorage.setItem('authToken', 'your-auth-token');
-        
+
         // Navegar a la página protegida
         setGmailCurrent(gmail);
         navigate('/home');
@@ -51,7 +51,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-logo">
-        <img src={logo} alt="Mastercard Logo" className="logo"/>
+        <img src={logo} alt="Mastercard Logo" className="logo" />
       </div>
       <Form className="login-form" onSubmit={handleSubmit}>
         <h3 className="inicio">Iniciar Sesión</h3>

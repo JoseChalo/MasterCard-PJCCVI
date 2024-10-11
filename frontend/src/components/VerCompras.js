@@ -6,6 +6,7 @@ import '../stylesCSS/VerCompras.css';
 import Navbar from '../components/Navbar';
 import { gmailUser } from './gmailUserContext.js';
 import axios from 'axios';
+import ipConfig from '../ipConfig.js';
 
 const VerCompras = () => {
   const [compras, setCompras] = useState([]);
@@ -17,11 +18,11 @@ const VerCompras = () => {
 
   const fetchTarjetaData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/tarjetas/user/${gmailBuscar}`);
+      const response = await axios.get(`${ipConfig.API_BASE_URL}/tarjetas/user/${gmailBuscar}`);
       const ultimosDigitos = response.data[0].numero;
       setMontoActual(response.data[0].monto_disponible);
 
-      const transaccionesResponse = await axios.get(`http://localhost:3001/transacciones/${ultimosDigitos}`);
+      const transaccionesResponse = await axios.get(`${ipConfig.API_BASE_URL}/transacciones/${ultimosDigitos}`);
       const transacciones = transaccionesResponse.data;
 
       setCompras([]); 

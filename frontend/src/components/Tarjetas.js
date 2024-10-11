@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import '../stylesCSS/Tarjetas.css';
 import Navbar from '../components/Navbar';
 import { gmailUser } from './gmailUserContext.js'; // Importamos el contexto
+import tarjetaImg from '../images/imgTarjetas.jpeg';
+import ipConfig from '../ipConfig.js';
 
 function Tarjetas() {
   const [tarjetas, setTarjetas] = useState([]);
@@ -14,7 +16,7 @@ function Tarjetas() {
 
   useEffect(() => {
     if (gmail) {
-      axios.get(`http://localhost:3001/tarjetas/user/${gmail}`)
+      axios.get(`${ipConfig.API_BASE_URL}/tarjetas/user/${gmail}`)
         .then(response => {
           setTarjetas(response.data);
           setLoading(false);
@@ -36,7 +38,7 @@ function Tarjetas() {
       <div className="tarjetas-container">
         <div className="gif-container">
           <img 
-            src="https://v2.cimg.co/news/113405/274473/adobestock-502295882-edit.jpeg"  
+            src={tarjetaImg}  
             className="gif-image"
             alt="Descripción de la tarjeta"
           />

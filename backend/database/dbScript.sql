@@ -56,7 +56,7 @@ INSERT INTO cardsUser VALUES ('1234567812345678', 'josechalo2003@gmail.com');
 
 SELECT * FROM users WHERE gmail = 'josechalo2003@gmail.com';
 
-
+use pjCCVI;
 SELECT * FROM tarjetas;
 SELECT * FROM users;
 SELECT * FROM cardsUser;

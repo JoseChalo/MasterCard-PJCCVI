@@ -1,3 +1,10 @@
+body {
+  font-family: "Public Sans", "Noto Sans", sans-serif;
+  margin: 0;
+  background-color: #181112;
+  height: 100%;
+}
+
 .App {
   text-align: center;
 }
