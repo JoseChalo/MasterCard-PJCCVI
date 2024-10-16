@@ -269,7 +269,7 @@ export const autorizacionTarjeta = async (req, res) => {
             .input("idTrans", sql.Int, insertTransacciones.recordset[0].id)
             .query('INSERT INTO trans_echas (numeroTarjeta, idTrans) VALUES (@numero, @idTrans);');
 
-        if (formato == 'json') {
+        if (formato == 'json' || formato == 'JSON') {
             console.log("Pago realizado exitosamente.");
             return res.json({
                 "autorización": {
@@ -279,7 +279,7 @@ export const autorizacionTarjeta = async (req, res) => {
                     "numero": insertTransacciones.recordset[0].id
                 }
             });
-        } else if (formato == 'xml') {
+        } else if (formato == 'xml' || formato == 'XML') {
             console.log("Pago realizado exitosamente.");
             const xmlResponse = `
                 <autorizacion>
